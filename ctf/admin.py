@@ -1,3 +1,5 @@
+from .models import Problem, UsersProblem
 from django.contrib import admin
 
-# Register your models here.
+admin.site.register(Problem)
+admin.site.register(UsersProblem)

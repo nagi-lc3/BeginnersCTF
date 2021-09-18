@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3rd party apps
+    # 'django.contrib.sites',
+    # 'allauth',
+    # 'allauth.account',
 
     # My applications
     'accounts.apps.AccountsConfig',
@@ -76,8 +79,8 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Authentication #
 ##################
 
-# AUTH_USER_MODEL = 'accounts.CustomUser'
-#
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
 # LOGIN_REDIRECT_URL = '/shop/'
 
 
@@ -90,7 +93,8 @@ DATABASES = {
 }
 DATABASES['default']['TIME_ZONE'] = 'Asia/Tokyo'
 DATABASES['default']['ATOMIC_REQUESTS'] = True
-# DATABASES['default']['OPTIONS']['sql_mode'] = 'TRADITIONAL,NO_AUTO_VALUE_ON_ZERO'
+DATABASES['default']['sql_mode'] = 'TRADITIONAL,NO_AUTO_VALUE_ON_ZERO'
+# DATABASES['default']['init_command'] = 'STRICT_TRANS_TABLES'
 
 #######################
 # Password validation #

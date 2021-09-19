@@ -34,3 +34,10 @@ class BoardView(TemplateView):
 
 
 board = BoardView.as_view()
+
+
+class MyPageView(TemplateView):
+    template_name = 'ctf/my_page.html'
+
+
+my_page = MyPageView.as_view()

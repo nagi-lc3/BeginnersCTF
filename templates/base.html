@@ -9,43 +9,96 @@
   <title>{% block page_title %}{% endblock %}</title>
 
   {# --- css --- #}
-  <!--  <link rel="stylesheet" href="{% static 'vendor/semantic/semantic.min.css' %}">-->
+  <!-- MDB icon -->
+  <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon"/>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css"/>
+  <!-- Google Fonts Roboto -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"/>
+  <!-- MDB -->
+  <link rel="stylesheet" href="{% static 'vendor/MDB5-STANDARD-UI-KIT-Free-3.9.0/css/mdb.min.css' %}"/>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
   {% block extra_css %}{% endblock %}
-  <!--[if lt IE 9]>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
-  <![endif]-->
-
 </head>
 
 
 <body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <!-- Container wrapper -->
+  <div class="container-fluid">
 
-<a href="{% url 'ctf:index' %}">TOPページ</a>
+    <!-- Navbar brand -->
+    <a class="navbar-brand mt-2 mt-lg-0" href="{% url 'ctf:index' %}">BeginnersCTF</a>
+
+    <!-- Toggle button -->
+    <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ctf:information' %}">お知らせ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ctf:ranking' %}">ランキング</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ctf:problem_list' %}">問題一覧</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ctf:board' %}">掲示板</a>
+        </li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+      </ul>
+      <!-- Left links -->
+
+      {% if user.is_authenticated %}
+      <!-- アイコン -->
+      <a class="nav-link dropdown-toggle align-items-center hidden-arrow m-0 px-0" href="#" id="navbarDropdownMenuLink"
+         role="button" data-mdb-toggle="dropdown" aria-expanded="false">
+        <img src="../media/icon/{{ user.icon }}" class="rounded-circle pe-1" height="25" alt=""
+             loading="lazy"/>{{ user.username }} ({{ user.score }})
+        <span class="dropdown-toggle"></span>
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+        <li>
+          <a class="dropdown-item" href="{% url 'ctf:my_page' %}">マイプロフィール</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="{% url 'account_logout' %}">ログアウト</a>
+        </li>
+      </ul>
+      {% else %}
+      <!-- ログインボタン -->
+      <a class="nav-link px-0" href="{% url 'account_login' %}">ログイン</a>
+      {% endif %}
+    </div>
+    <!-- Collapsible wrapper -->
 
 
-<a href="{% url 'ctf:information' %}">お知らせ</a>
-<a href="{% url 'ctf:ranking' %}">ランキング</a>
-<a href="{% url 'ctf:problem_list' %}">問題一覧</a>
-<a href="{% url 'ctf:board' %}">掲示板</a>
-
-<ul class="navbar-nav ml-auto">
-  {% if user.is_authenticated %}
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'account_logout' %}">Log Out</a>
-  </li>
-  {% else %}
-  <li class="nav-item {% block active_login %}{% endblock %}">
-    <a class="nav-link" href="{% url 'account_login' %}">Log In</a>
-  </li>
-  {% endif %}
-</ul>
+  </div>
+  <!-- Right elements -->
+  </div>
+  <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
 
 {% block content %}{% endblock %}
 
 {# --- js --- #}
-<!--<script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>-->
-<!--<script src="{% static 'js/jquery-ui.min.js' %}"></script>-->
-<!--<script src="{% static 'vendor/semantic/semantic.min.js' %}"></script>-->
+<!-- MDB -->
+<script type="text/javascript" src="{% static 'vendor/MDB5-STANDARD-UI-KIT-Free-3.9.0/js/mdb.min.js' %}"></script>
+<!-- Custom scripts -->
+<script type="text/javascript" src="{% static 'js/base.js' %}"></script>
 {% block extra_js %}{% endblock %}
 </body>
 

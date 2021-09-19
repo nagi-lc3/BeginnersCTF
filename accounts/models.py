@@ -11,4 +11,4 @@ class CustomUser(AbstractUser):
 
     score = models.IntegerField(verbose_name='ユーザ点数', default=0)
     ranking = models.IntegerField(verbose_name='ユーザランキング', null=True, blank=True)
-    icon = models.ImageField(verbose_name='ユーザアイコン', null=True, blank=True)
+    icon = models.ImageField(verbose_name='ユーザアイコン', upload_to='icon/', default='default.jpg')

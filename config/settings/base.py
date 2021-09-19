@@ -36,9 +36,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # 3rd party apps
-    # 'django.contrib.sites',
-    # 'allauth',
-    # 'allauth.account',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.github',
+    'allauth.socialaccount.providers.twitter',
 
     # My applications
     'accounts.apps.AccountsConfig',
@@ -143,6 +148,40 @@ MEDIA_URL = '/media/'
 #######################
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#######################
+# django-allauth #
+#######################
+
+# django-allauthで利用するdjango.contrib.sitesを使うためにサイト識別用IDを設定
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = (
+    'allauth.account.auth_backends.AuthenticationBackend',  # 一般ユーザー用（メールアドレス認証）
+    'django.contrib.auth.backends.ModelBackend',  # 管理サイト用（ユーザー名認証）
+)
+
+# メールアドレス認証に変更する設定
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_USERNAME_REQUIRED = False
+
+# サインアップにメールアドレス確認をはさむよう設定
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_REQUIRED = True
+
+# ログイン／ログアウト後の遷移先設定
+LOGIN_REDIRECT_URL = 'ctf:problem_list'
+ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
+
+# ログアウトリンクのクリック一発でログアウトする設定
+ACCOUNT_LOGOUT_ON_GET = True
+
+# コンソールにメールを送信
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# バックアップパッチ用
+# BACKUP_PATH = 'backup/'
+# NUM_SAVED_BACKUP = 30
 
 ##################
 # django-tables2 #

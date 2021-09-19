@@ -22,13 +22,23 @@
 
 <a href="{% url 'ctf:index' %}">TOPページ</a>
 
-<a href="{% url 'accounts:login' %}">ログイン</a>
-<a href="{% url 'accounts:my_page' %}">マイページ</a>
 
 <a href="{% url 'ctf:information' %}">お知らせ</a>
 <a href="{% url 'ctf:ranking' %}">ランキング</a>
 <a href="{% url 'ctf:problem_list' %}">問題一覧</a>
 <a href="{% url 'ctf:board' %}">掲示板</a>
+
+<ul class="navbar-nav ml-auto">
+  {% if user.is_authenticated %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'account_logout' %}">Log Out</a>
+  </li>
+  {% else %}
+  <li class="nav-item {% block active_login %}{% endblock %}">
+    <a class="nav-link" href="{% url 'account_login' %}">Log In</a>
+  </li>
+  {% endif %}
+</ul>
 
 {% block content %}{% endblock %}
 

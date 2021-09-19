@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %} BeginnersCTF | サインアップ{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/account.css' %}"/> {% endblock %}
+
+{% load i18n %}
+
+{% block content %}
+
+<div class="container my-5">
+  <!-- タイトル -->
+  <h6 class="font-weight-bold text-center grey-text text-uppercase small mb-4">sign_up</h6>
+  <h3 class="font-weight-bold text-center white-text pb-2">サインアップ</h3>
+  <hr class="w-header white my-4">
+
+  <div class="row d-flex align-items-center justify-content-center">
+    <div class="card col-11 col-sm-10 col-md-8 col-lg-4">
+      <div class="card-body z-depth-2 px-4">
+
+        <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+          {% csrf_token %}
+
+          <table class="table">
+            {{ form.as_table }}
+          </table>
+
+          {% if redirect_field_value %}
+          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+          {% endif %}
+          <div class="my-3">
+            <button type="submit" class="primaryAction btn btn-primary btn-block waves-effect waves-light">登録</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

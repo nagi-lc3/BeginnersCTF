@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block page_title %}500エラー | BeginnersCTF{% endblock %}
-
-{% block extra_css %}
-<style type="text/css">
-</style>
-{% endblock %}
+{% block page_title %} BeginnersCTF | 500エラー{% endblock %}
 
 {% block content %}
-<h1>想定外のエラーが発生しました。</h1>
+<div class="container my-5">
+  <!-- タイトル -->
+  <h6 class="font-weight-bold text-center grey-text text-uppercase small mb-4">500</h6>
+  <h3 class="font-weight-bold text-center white-text pb-2">想定外のエラーが発生しました。</h3>
+  <hr class="w-header white my-4">
+</div>
 {% endblock %}

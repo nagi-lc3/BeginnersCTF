@@ -65,13 +65,13 @@
       <!-- アイコン -->
       <a class="nav-link dropdown-toggle align-items-center hidden-arrow m-0 px-0" href="#" id="navbarDropdownMenuLink"
          role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-        <img src="../media/icon/{{ user.icon }}" class="rounded-circle pe-1" height="25" alt=""
+        <img src="../media/{{ user.icon }}" class="rounded-circle border me-1" height="25" alt=""
              loading="lazy"/>{{ user.username }} ({{ user.score }})
         <span class="dropdown-toggle"></span>
       </a>
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
         <li>
-          <a class="dropdown-item" href="{% url 'ctf:my_page' %}">マイプロフィール</a>
+          <a class="dropdown-item" href="{% url 'ctf:my_page' %}">マイページ</a>
         </li>
         <li>
           <a class="dropdown-item" href="{% url 'account_logout' %}">ログアウト</a>

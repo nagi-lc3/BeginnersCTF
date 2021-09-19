@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 
 
@@ -15,28 +16,28 @@ class InformationView(TemplateView):
 information = InformationView.as_view()
 
 
-class RankingView(TemplateView):
+class RankingView(LoginRequiredMixin, TemplateView):
     template_name = 'ctf/ranking.html'
 
 
 ranking = RankingView.as_view()
 
 
-class ProblemListView(TemplateView):
+class ProblemListView(LoginRequiredMixin, TemplateView):
     template_name = 'ctf/problem_list.html'
 
 
 problem_list = ProblemListView.as_view()
 
 
-class BoardView(TemplateView):
+class BoardView(LoginRequiredMixin, TemplateView):
     template_name = 'ctf/board.html'
 
 
 board = BoardView.as_view()
 
 
-class MyPageView(TemplateView):
+class MyPageView(LoginRequiredMixin, TemplateView):
     template_name = 'ctf/my_page.html'
 
 

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %} BeginnersCTF | メールアドレスの確認{% endblock %}
+
+{% load i18n %}
+{% load account %}
+
+{% block content %}
+
+<div class="container my-5">
+  <!-- タイトル -->
+  <h6 class="font-weight-bold text-center grey-text text-uppercase small mb-4">email_confirm</h6>
+  <h3 class="font-weight-bold text-center white-text pb-2">メールアドレスの確認</h3>
+  <hr class="w-header white my-4">
+
+  <div class="row d-flex align-items-center justify-content-center">
+    <div class="card col-11 col-sm-10 col-md-8 col-lg-4">
+      <div class="card-body z-depth-2 px-4">
+
+        {% if confirmation %}
+        <p>{% blocktrans with confirmation.email_address.email as email %} <a href="mailto:{{ email }}">{{ email }}</a>{% endblocktrans %}でユーザー登録をします。</p>
+        <p>ユーザー登録を確定するには、以下のボタンを押してください。</p>
+
+        <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+          {% csrf_token %}
+          <button type="submit" class="primaryAction btn btn-primary btn-block waves-effect waves-light">確定</button>
+        </form>
+
+        {% else %}
+        {% url 'account_email' as email_url %}
+        <p>リンクの有効期限が過ぎています。<a href="{{ email_url }}">再申請</a>.</p>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% endblock %}

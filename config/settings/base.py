@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-# LOGIN_REDIRECT_URL = '/shop/'
+LOGIN_REDIRECT_URL = 'account_login'
 
 
 ############
@@ -175,6 +175,9 @@ ACCOUNT_LOGOUT_REDIRECT_URL = 'account_login'
 
 # ログアウトリンクのクリック一発でログアウトする設定
 ACCOUNT_LOGOUT_ON_GET = True
+
+# 送信元メールアドレス
+DEFAULT_FROM_EMAIL = 'beginnersctf@gmail.com'
 
 # コンソールにメールを送信
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

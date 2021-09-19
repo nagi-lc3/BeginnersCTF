@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block page_title %}404エラー | BeginnersCTF{% endblock %}
-
-{% block extra_css %}
-<style type="text/css">
-</style>
-{% endblock %}
+{% block page_title %} BeginnersCTF | 404エラー{% endblock %}
 
 {% block content %}
-<h1>ページが見つかりませんでした。</h1>
+<div class="container my-5">
+  <!-- タイトル -->
+  <h6 class="font-weight-bold text-center grey-text text-uppercase small mb-4">404</h6>
+  <h3 class="font-weight-bold text-center white-text pb-2">ページが見つかりませんでした。</h3>
+  <hr class="w-header white my-4">
+</div>
 {% endblock %}

@@ -34,6 +34,7 @@ class Problem(models.Model):
     level = models.IntegerField(verbose_name='問題難易度', choices=LEVEL)
     score = models.IntegerField(verbose_name='問題得点')
     answer = models.CharField(verbose_name='問題解答', max_length=255)
+    date_post = models.DateTimeField(verbose_name='問題投稿日時', auto_now_add=True)
 
     custom_user = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UsersProblem')
 
@@ -52,3 +53,15 @@ class UsersProblem(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
 
     problem_correct_answer = models.BooleanField(verbose_name="問題正解", default=0)
+
+
+class Information(models.Model):
+    """お知らせテーブル"""
+
+    class Meta:
+        db_table = 'information'
+        verbose_name = verbose_name_plural = 'お知らせ'
+
+        title = models.CharField(verbose_name='お知らせタイトル', max_length=255)
+        contents = models.CharField(verbose_name='お知らせ内容', max_length=4095)
+        date_post = models.DateTimeField(verbose_name='お知らせ投稿日時', auto_now_add=True)

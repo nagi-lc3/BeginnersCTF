@@ -1,4 +1,4 @@
-from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.db import models
 
 
@@ -37,7 +37,7 @@ class Problem(models.Model):
     created_at = models.DateTimeField(verbose_name='問題作成日時', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='問題更新日時', auto_now=True)
 
-    custom_user = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UsersProblem')
+    custom_user = models.ManyToManyField(get_user_model(), through='UsersProblem')
 
     def __str__(self):
         return self.name
@@ -50,7 +50,7 @@ class UsersProblem(models.Model):
         db_table = 'users_problem'
         verbose_name = verbose_name_plural = 'ユーザ問題'
 
-    custom_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='ユーザ名')
+    custom_user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='ユーザ名')
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, verbose_name='問題名')
 
     problem_correct_answer = models.BooleanField(verbose_name="問題正解", default=0)

@@ -57,6 +57,9 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'ctf:board' %}">掲示板</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'ctf:inquiry' %}">お問い合わせ</a>
+        </li>
         <li>
           <hr class="dropdown-divider">
         </li>
@@ -99,8 +102,10 @@
 {# --- js --- #}
 <!-- MDB -->
 <script type="text/javascript" src="{% static 'vendor/MDB5-STANDARD-UI-KIT-Free-3.9.0/js/mdb.min.js' %}"></script>
+<!-- JQuery -->
+<script type="text/javascript" src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
 <!-- Custom scripts -->
-<script type="text/javascript" src="{% static 'js/base.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/filterList.js' %}"></script>
 {% block extra_js %}{% endblock %}
 </body>
 

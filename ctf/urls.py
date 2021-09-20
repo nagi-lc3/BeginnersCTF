@@ -9,5 +9,6 @@ urlpatterns = [
     path('ranking/', views.ranking, name="ranking"),
     path('problem_list/', views.problem_list, name="problem_list"),
     path('board/', views.board, name="board"),
+    path('inquiry/', views.inquiry, name="inquiry"),
     path('my_page/', views.my_page, name="my_page"),
 ]

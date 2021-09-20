@@ -9,5 +9,15 @@
   <h6 class="font-weight-bold text-center grey-text text-uppercase small mb-4">information</h6>
   <h3 class="font-weight-bold text-center white-text pb-2">お知らせページ</h3>
   <hr class="w-header white my-4">
+
+  {% for information in information_list %}
+  <div class="card my-3 p-3 bg-info">
+    <h3 class="m-0">{{ information.title }}</h3>
+    <hr>
+    <p>{{ information.contents }}</p>
+    <p class="text-end m-0">{{ information.created_at }}</p>
+  </div>
+  {% endfor %}
+
 </div>
 {% endblock %}

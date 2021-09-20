@@ -9,5 +9,35 @@
   <h6 class="font-weight-bold text-center grey-text text-uppercase small mb-4">problem_list</h6>
   <h3 class="font-weight-bold text-center white-text pb-2">問題一覧ページ</h3>
   <hr class="w-header white my-4">
+
+  <div class="search">
+    <span class="btn search_item is-active" data-group="">ALL</span>
+    <span class="btn search_item" data-group="crypto">Crypto</span>
+    <span class="btn search_item" data-group="forensics">Forensics</span>
+    <span class="btn search_item" data-group="reversing">Reversing</span>
+    <span class="btn search_item" data-group="pwnable">Pwnable</span>
+    <span class="btn search_item" data-group="web">Web</span>
+    <span class="btn search_item" data-group="network">Network</span>
+    <span class="btn search_item" data-group="misc">Misc</span>
+  </div>
+
+  <div class="container">
+    <div class="row list">
+      {% for problem in problem_list %}
+      <div class="col-6 col-md-4 list_item" data-group="{{ problem.genre }}">
+        <div class="card my-3 p-3 bg-info">
+          <h4 class="m-0">{{ problem.name }}</h4>
+          <hr>
+          <p><a href="../media/{{ problem.file }}" download>{{ problem.file|cut:"problems/" }}</a></p>
+          <p>ジャンル<br>{{ problem.genre }}</p>
+          <p>レベル<br>{{ problem.level }}</p>
+          <p>点数<br>{{ problem.score }}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
 </div>
+
 {% endblock %}

@@ -4,3 +4,4 @@ mysqlclient
 django-debug-toolbar
 django-allauth
 pillow
+django-jazzmin

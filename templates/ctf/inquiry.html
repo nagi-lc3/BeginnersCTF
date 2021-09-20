@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %}BeginnersCTF | お問い合わせ{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <!-- タイトル -->
+  <h6 class="font-weight-bold text-center grey-text text-uppercase small mb-4">inquiry</h6>
+  <h3 class="font-weight-bold text-center white-text pb-2">お問い合わせページ</h3>
+  <hr class="w-header white my-4">
+
+  <form method="post">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        {% for field in form %}
+          <div class="form-group row">
+            <label for="{{ field.id_for_label }}" class="col-sm-4 col-form-label">
+              <strong>{{ field.label_tag }}</strong>
+            </label>
+            <div class="col-sm-8">
+              {{ field }}
+              {{ field.errors }}
+            </div>
+          </div>
+        {% endfor %}
+
+        <div class="offset-sm-4 col-sm-8">
+          <button class="btn btn-primary" type="submit">送信</button>
+        </div>
+      </form>
+</div>
+{% endblock %}

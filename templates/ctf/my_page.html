@@ -9,9 +9,14 @@
   <h6 class="font-weight-bold text-center grey-text text-uppercase small mb-4">my_page</h6>
   <h3 class="font-weight-bold text-center white-text pb-2">マイページ</h3>
   <hr class="w-header white my-4">
-</div>
 
-<form method="post" class="ms-5">
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}" role="alert">
+    <span>{{ message }}</span>
+  </div>
+  {% endfor %}
+
+  <form method="post" class="">
   {% csrf_token %}
 
   {{ form.non_field_errors }}
@@ -31,4 +36,5 @@
     <button class="primaryAction btn btn-primary btn-block waves-effect waves-light w-25" type="submit">更新</button>
   </div>
 </form>
+</div>
 {% endblock %}

@@ -29,12 +29,13 @@ class Problem(models.Model):
 
     name = models.CharField(verbose_name='問題名', max_length=255)
     file = models.FileField(verbose_name='問題ファイル', upload_to='problems/')
-    statement = models.CharField(verbose_name='問題文', max_length=4095)
+    statement = models.TextField(verbose_name='問題文')
     genre = models.CharField(verbose_name='問題ジャンル', choices=GENRE, max_length=255)
     level = models.IntegerField(verbose_name='問題難易度', choices=LEVEL)
     score = models.IntegerField(verbose_name='問題得点')
     answer = models.CharField(verbose_name='問題解答', max_length=255)
-    date_post = models.DateTimeField(verbose_name='問題投稿日時', auto_now_add=True)
+    created_at = models.DateTimeField(verbose_name='問題作成日時', auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name='問題更新日時', auto_now=True)
 
     custom_user = models.ManyToManyField(settings.AUTH_USER_MODEL, through='UsersProblem')
 
@@ -53,6 +54,10 @@ class UsersProblem(models.Model):
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
 
     problem_correct_answer = models.BooleanField(verbose_name="問題正解", default=0)
+    corrected_at = models.DateTimeField(verbose_name='問題正解日時', auto_now_add=True)
+
+    def __str__(self):
+        return str(self.custom_user) + ", " + str(self.problem)
 
 
 class Information(models.Model):
@@ -62,6 +67,10 @@ class Information(models.Model):
         db_table = 'information'
         verbose_name = verbose_name_plural = 'お知らせ'
 
-        title = models.CharField(verbose_name='お知らせタイトル', max_length=255)
-        contents = models.CharField(verbose_name='お知らせ内容', max_length=4095)
-        date_post = models.DateTimeField(verbose_name='お知らせ投稿日時', auto_now_add=True)
+    title = models.CharField(verbose_name='お知らせタイトル', max_length=255)
+    contents = models.TextField(verbose_name='お知らせ内容')
+    created_at = models.DateTimeField(verbose_name='お知らせ作成日時', auto_now_add=True)
+    updated_at = models.DateTimeField(verbose_name='お知らせ更新日時', auto_now=True)
+
+    def __str__(self):
+        return self.title

@@ -13,8 +13,10 @@ class UserProblemAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'custom_user', 'problem', 'custom_user_id', 'problem_id', 'problem_correct_answer', 'corrected_at')
     list_display_links = ('id', 'custom_user')
-    search_fields = ('id', 'custom_user__id', 'problem__id', 'problem_correct_answer', 'corrected_at')
-    list_filter = ('custom_user', 'problem', 'problem_correct_answer', 'corrected_at')
+    search_fields = (
+        'id', 'custom_user__username', 'problem__name', 'custom_user__id', 'problem__id', 'problem_correct_answer',
+        'corrected_at')
+    list_filter = ('custom_user__username', 'problem__name', 'problem_correct_answer', 'corrected_at')
 
 
 class InformationAdmin(admin.ModelAdmin):

@@ -3,6 +3,11 @@ from django.contrib import admin
 from django.urls import include, path
 from django.conf.urls.static import static
 
+# 管理サイト設定
+admin.site.site_header = 'BeginnersCTF'
+admin.site.index_title = 'BeginnersCTF'
+admin.site.site_title = '管理サイト'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('ctf.urls')),

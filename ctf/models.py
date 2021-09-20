@@ -50,14 +50,11 @@ class UsersProblem(models.Model):
         db_table = 'users_problem'
         verbose_name = verbose_name_plural = 'ユーザ問題'
 
-    custom_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE)
+    custom_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='ユーザ名')
+    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, verbose_name='問題名')
 
     problem_correct_answer = models.BooleanField(verbose_name="問題正解", default=0)
     corrected_at = models.DateTimeField(verbose_name='問題正解日時', auto_now_add=True)
-
-    def __str__(self):
-        return str(self.custom_user) + ", " + str(self.problem)
 
 
 class Information(models.Model):

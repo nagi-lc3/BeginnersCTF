@@ -49,6 +49,7 @@ class UserProblem(models.Model):
     class Meta:
         db_table = 'user_problem'
         verbose_name = verbose_name_plural = 'ユーザ問題'
+        unique_together = ['custom_user', 'problem']
 
     custom_user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='ユーザ名')
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, verbose_name='問題名')
@@ -56,11 +57,11 @@ class UserProblem(models.Model):
     problem_correct_answer = models.BooleanField(verbose_name="問題正解", default=0)
     corrected_at = models.DateTimeField(verbose_name='問題正解日時', auto_now_add=True)
 
-    class Meta:
-        constraints = [
-            # custom_userとproblemでユニーク制約
-            models.UniqueConstraint(fields=['custom_user', 'problem'], name='unique_stock')
-        ]
+    # class Meta:
+    #     constraints = [
+    #         # custom_userとproblemでユニーク制約
+    #         models.UniqueConstraint(fields=['custom_user', 'problem'], name='unique_stock')
+    #     ]
 
 
 class Information(models.Model):

@@ -56,7 +56,7 @@ class UserProblem(models.Model):
     custom_user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='ユーザ名')
     problem = models.ForeignKey(Problem, on_delete=models.CASCADE, verbose_name='問題名')
 
-    problem_correct_answer = models.BooleanField(verbose_name="問題正解", default=0)
+    problem_correct_answer = models.BooleanField(verbose_name='問題正解', default=0)
     corrected_at = models.DateTimeField(verbose_name='問題正解日時', auto_now_add=True)
 
     # class Meta:

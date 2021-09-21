@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-{% load boost %}
 
 {% block page_title %}BeginnersCTF | 問題一覧{% endblock %}
 
@@ -26,16 +25,16 @@
     <div class="row list">
       {% for userproblem in userproblem_list %}
       <div class="col-6 col-md-4 list_item" data-group="{{ userproblem.problem.genre }}">
-        <div class="card my-3 p-3 bg-info">
-          <h4 class="m-0">{{ userproblem.problem.name }}</h4>
-          <hr>
-          <p><a href="../media/{{ userproblem.problem.file }}" download>{{ userproblem.problem.file|cut:"problems/"|default:'ファイルなし' }}</a></p>
-          <p>ジャンル：{{ userproblem.problem.genre }}</p>
-          <p>レベル：{{ userproblem.problem.level }}</p>
-          <p>点数：{{ userproblem.problem.score }}</p>
-          <p>解答済み：{{ userproblem.problem_correct_answer|yesno:'☑, ☐' }}
-          </p>
-        </div>
+        <a class="btn card my-3 p-3 bg-info" href="{% url 'ctf:problem_detail' userproblem.problem.pk %}">
+          <div class="card-body">
+            <h4 class="card-title m-0">{{ userproblem.problem.name }}</h4>
+            <hr class="card-text">
+            <p class="card-text btn-text-size">ジャンル：{{ userproblem.problem.genre }}</p>
+            <p class="card-text">レベル：{{ userproblem.problem.level }}</p>
+            <p class="card-text">点数：{{ userproblem.problem.score }}</p>
+            <p class="card-text">{{ userproblem.problem_correct_answer|yesno:'解答済み☑, 未回答□' }}</p>
+          </div>
+        </a>
       </div>
       {% endfor %}
     </div>

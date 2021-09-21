@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_title %}BeginnersCTF | 問題詳細{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <!-- タイトル -->
+  <h6 class="font-weight-bold text-center grey-text text-uppercase small mb-4">problem_detail</h6>
+  <h3 class="font-weight-bold text-center white-text pb-2">問題詳細ページ</h3>
+  <hr class="w-header white my-4">
+
+  <h3>問題名：{{ problem.name }}</h3>
+  <p>問題内容：{{ problem.statement }}</p>
+  <p>添付ファイル：<a href="../../media/{{ problem.file }}" download>{{ problem.file|cut:"problems/"|default:'ファイルなし' }}</a></p>
+
+</div>
+{% endblock %}

@@ -11,4 +11,5 @@ urlpatterns = [
     path('board/', views.board, name="board"),
     path('inquiry/', views.inquiry, name="inquiry"),
     path('my_page/', views.my_page, name="my_page"),
+    path('problem_detail/<int:pk>/', views.problem_detail, name="problem_detail"),
 ]

@@ -1,7 +1,15 @@
+/* ボタン内の文字列を小文字に */
+.btn-text-size {
+    text-transform:capitalize;
+}
+
+
+/* listFilter.jsの設定 */
 .search_item.is-active {
   color: white;
   background-color: black;
 }
+
 .is-hide {
   display: none;
 }

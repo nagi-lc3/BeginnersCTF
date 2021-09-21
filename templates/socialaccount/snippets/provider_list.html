@@ -17,7 +17,7 @@
 {% endif %}
 <li class="my-3">
   <a title="{{provider.name}}"
-     class="socialaccount_provider btn-size btn btn-block btn-social btn-{{provider.id}} {{provider.id}}"
+     class="socialaccount_provider btn-text-size btn btn-block btn-social btn-{{provider.id}} {{provider.id}}"
      href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">
     <i class="fab fa-{{provider.id}}"></i>{{provider.id}}でサインイン
   </a>

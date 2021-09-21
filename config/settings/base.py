@@ -28,7 +28,7 @@ ALLOWED_HOSTS = []
 #################
 
 INSTALLED_APPS = [
-    'jazzmin',
+    'jazzmin',  # 管理サイトのデザイン
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'django_boost',
 
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
@@ -88,7 +89,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 LOGIN_REDIRECT_URL = 'account_login'
-
 
 ############
 # Database #

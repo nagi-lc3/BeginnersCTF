@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load boost %}
 
 {% block page_title %}BeginnersCTF | 問題一覧{% endblock %}
 
@@ -11,27 +12,29 @@
   <hr class="w-header white my-4">
 
   <div class="search">
-    <span class="btn search_item is-active" data-group="">ALL</span>
-    <span class="btn search_item" data-group="crypto">Crypto</span>
-    <span class="btn search_item" data-group="forensics">Forensics</span>
-    <span class="btn search_item" data-group="reversing">Reversing</span>
-    <span class="btn search_item" data-group="pwnable">Pwnable</span>
-    <span class="btn search_item" data-group="web">Web</span>
-    <span class="btn search_item" data-group="network">Network</span>
-    <span class="btn search_item" data-group="misc">Misc</span>
+    <span class="btn btn-text-size search_item is-active" data-group="">ALL</span>
+    <span class="btn btn-text-size search_item" data-group="crypto">Crypto</span>
+    <span class="btn btn-text-size search_item" data-group="forensics">Forensics</span>
+    <span class="btn btn-text-size search_item" data-group="reversing">Reversing</span>
+    <span class="btn btn-text-size search_item" data-group="pwnable">Pwnable</span>
+    <span class="btn btn-text-size search_item" data-group="web">Web</span>
+    <span class="btn btn-text-size search_item" data-group="network">Network</span>
+    <span class="btn btn-text-size search_item" data-group="misc">Misc</span>
   </div>
 
   <div class="container">
     <div class="row list">
-      {% for problem in problem_list %}
-      <div class="col-6 col-md-4 list_item" data-group="{{ problem.genre }}">
+      {% for userproblem in userproblem_list %}
+      <div class="col-6 col-md-4 list_item" data-group="{{ userproblem.problem.genre }}">
         <div class="card my-3 p-3 bg-info">
-          <h4 class="m-0">{{ problem.name }}</h4>
+          <h4 class="m-0">{{ userproblem.problem.name }}</h4>
           <hr>
-          <p><a href="../media/{{ problem.file }}" download>{{ problem.file|cut:"problems/" }}</a></p>
-          <p>ジャンル<br>{{ problem.genre }}</p>
-          <p>レベル<br>{{ problem.level }}</p>
-          <p>点数<br>{{ problem.score }}</p>
+          <p><a href="../media/{{ problem.file }}" download>{{ userproblem.problem.file|cut:"problems/" }}</a></p>
+          <p>ジャンル：{{ userproblem.problem.genre }}</p>
+          <p>レベル：{{ userproblem.problem.level }}</p>
+          <p>点数：{{ userproblem.problem.score }}</p>
+          <p>解答済み：{{ userproblem.problem_correct_answer|yesno:'☑, ☐' }}
+          </p>
         </div>
       </div>
       {% endfor %}

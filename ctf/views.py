@@ -1,5 +1,5 @@
 from .forms import UsernameChangeForm
-from .models import Information, Problem
+from .models import Information, Problem, UserProblem
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
@@ -34,11 +34,31 @@ ranking = RankingView.as_view()
 
 
 class ProblemListView(LoginRequiredMixin, ListView):
-    model = Problem
+    model = UserProblem
     template_name = 'ctf/problem_list.html'
+    ordering = 'level'
 
-    def get_queryset(self):
-        return Problem.objects.order_by('level')
+    # クエリ数が多くなるかも
+    # def get_queryset(self):
+    #     for i in range(Problem.objects.count()):
+    #         result, created = UserProblem.objects.get_or_create(custom_user_id=self.request.user.id,
+    #                                                             problem_id=i + 1)
+
+    # def get_queryset(self):
+    #     add_user_problem = []
+    #     for i in range(Problem.objects.count()):
+    #         user_problem = UserProblem(custom_user_id=self.request.user.id, problem_id=i + 1)
+    #         add_user_problem.append(user_problem)
+    #     # ignore_conflicts=Trueで重複回避
+    #     UserProblem.objects.bulk_create(add_user_problem, ignore_conflicts=True)
+    #
+    #     return UserProblem.objects.all().select_related('problem').filter(custom_user_id=self.request.user.id, )
+
+
+# def get_context_data(self, **kwargs):
+#     context = super().get_context_data(**kwargs)
+#     context['problem_list'] = Problem.objects.all()
+#     return context
 
 
 problem_list = ProblemListView.as_view()

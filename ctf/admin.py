@@ -1,4 +1,4 @@
-from .models import Problem, UsersProblem, Information
+from .models import Problem, UserProblem, Information
 from django.contrib import admin
 
 
@@ -14,7 +14,7 @@ class UserProblemAdmin(admin.ModelAdmin):
         'id', 'custom_user', 'problem', 'custom_user_id', 'problem_id', 'problem_correct_answer', 'corrected_at')
     list_display_links = ('id', 'custom_user')
     search_fields = (
-        'id', 'custom_user__username', 'problem__name', 'custom_user__id', 'problem__id', 'problem_correct_answer',
+        'id', 'custom_user_username', 'problem__name', 'custom_user__id', 'problem__id', 'problem_correct_answer',
         'corrected_at')
     list_filter = ('custom_user__username', 'problem__name', 'problem_correct_answer', 'corrected_at')
 
@@ -27,5 +27,5 @@ class InformationAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Problem, ProblemAdmin)
-admin.site.register(UsersProblem, UserProblemAdmin)
+admin.site.register(UserProblem, UserProblemAdmin)
 admin.site.register(Information, InformationAdmin)

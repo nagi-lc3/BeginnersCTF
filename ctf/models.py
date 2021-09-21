@@ -37,17 +37,17 @@ class Problem(models.Model):
     created_at = models.DateTimeField(verbose_name='問題作成日時', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='問題更新日時', auto_now=True)
 
-    custom_user = models.ManyToManyField(get_user_model(), through='UsersProblem')
+    custom_user = models.ManyToManyField(get_user_model(), through='UserProblem', )
 
     def __str__(self):
         return self.name
 
 
-class UsersProblem(models.Model):
+class UserProblem(models.Model):
     """ユーザ問題モデル（中間テーブル）"""
 
     class Meta:
-        db_table = 'users_problem'
+        db_table = 'user_problem'
         verbose_name = verbose_name_plural = 'ユーザ問題'
 
     custom_user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='ユーザ名')
@@ -55,6 +55,12 @@ class UsersProblem(models.Model):
 
     problem_correct_answer = models.BooleanField(verbose_name="問題正解", default=0)
     corrected_at = models.DateTimeField(verbose_name='問題正解日時', auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            # custom_userとproblemでユニーク制約
+            models.UniqueConstraint(fields=['custom_user', 'problem'], name='unique_stock')
+        ]
 
 
 class Information(models.Model):

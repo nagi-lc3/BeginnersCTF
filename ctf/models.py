@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -28,7 +30,7 @@ class Problem(models.Model):
     )
 
     name = models.CharField(verbose_name='問題名', max_length=255)
-    file = models.FileField(verbose_name='問題ファイル', upload_to='problems/')
+    file = models.FileField(verbose_name='問題ファイル', upload_to='problems/', null=True, blank=True)
     statement = models.TextField(verbose_name='問題文')
     genre = models.CharField(verbose_name='問題ジャンル', choices=GENRE, max_length=255)
     level = models.IntegerField(verbose_name='問題難易度', choices=LEVEL)

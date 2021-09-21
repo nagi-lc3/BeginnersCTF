@@ -21,7 +21,11 @@
     <div class="card col-11 col-sm-10 col-md-8 col-lg-4">
       <div class="card-body z-depth-2 px-4">
 
-        <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+        <p>{% blocktrans with provider_name=account.get_provider.name site_name=site.name %}{{provider_name}}アカウントを利用して
+          {{site_name}}にアカウント登録をします。{% endblocktrans %}
+        </p>
+
+        <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
           {% csrf_token %}
 
           <table class="table">
@@ -39,7 +43,6 @@
       </div>
     </div>
   </div>
-
 </div>
 
 {% endblock %}

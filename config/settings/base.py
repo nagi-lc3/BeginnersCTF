@@ -183,6 +183,9 @@ DEFAULT_FROM_EMAIL = 'beginnersctf@gmail.com'
 # コンソールにメールを送信
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# adapterをオーバーライドするための設定
+ACCOUNT_ADAPTER = 'accounts.adapter.AccountAdapter'
+
 # バックアップパッチ用
 # BACKUP_PATH = 'backup/'
 # NUM_SAVED_BACKUP = 30

@@ -1,5 +1,3 @@
-import uuid
-
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -39,7 +37,8 @@ class Problem(models.Model):
     created_at = models.DateTimeField(verbose_name='問題作成日時', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='問題更新日時', auto_now=True)
 
-    custom_user = models.ManyToManyField(get_user_model(), through='UserProblem', )
+    # UserProblemテーブルとPersonテーブルの間にUserProblem中間テーブル
+    custom_user = models.ManyToManyField(get_user_model(), through='UserProblem')
 
     def __str__(self):
         return self.name
@@ -53,11 +52,12 @@ class UserProblem(models.Model):
         verbose_name = verbose_name_plural = 'ユーザ問題'
         unique_together = ['custom_user', 'problem']
 
-    custom_user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='ユーザ名')
-    problem = models.ForeignKey(Problem, on_delete=models.CASCADE, verbose_name='問題名')
+    # リレーション
+    custom_user = models.ForeignKey(get_user_model(), verbose_name='ユーザ名', on_delete=models.PROTECT)
+    problem = models.ForeignKey(Problem, verbose_name='問題名', on_delete=models.PROTECT)
 
     problem_correct_answer = models.BooleanField(verbose_name='問題正解', default=0)
-    corrected_at = models.DateTimeField(verbose_name='問題正解日時', auto_now_add=True)
+    corrected_at = models.DateTimeField(verbose_name='問題正解日時', null=True, blank=True)
 
     # class Meta:
     #     constraints = [
@@ -67,7 +67,7 @@ class UserProblem(models.Model):
 
 
 class Information(models.Model):
-    """お知らせテーブル"""
+    """お知らせモデル"""
 
     class Meta:
         db_table = 'information'
@@ -80,3 +80,31 @@ class Information(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Inquiry(models.Model):
+    """お問い合わせモデル"""
+
+    class Meta:
+        db_table = 'inquiry'
+        verbose_name = verbose_name_plural = 'お問い合わせ'
+
+    CATEGORY = (
+        ('1', 'category1'),
+        ('2', 'category2'),
+        ('3', 'category3'),
+        ('4', 'category4'),
+        ('5', 'category5'),
+    )
+
+    # リレーション（CustomUserモデルと多対1）
+    custom_user = models.ForeignKey(get_user_model(), verbose_name='ユーザ名', on_delete=models.PROTECT)
+
+    subject = models.CharField(verbose_name='お問い合わせ件名', max_length=255)
+    category = models.CharField(verbose_name='お問い合わせカテゴリ', choices=CATEGORY, max_length=255)
+    email = models.EmailField(verbose_name='メールアドレス')
+    contents = models.TextField(verbose_name='お問い合わせ内容')
+    created_at = models.DateTimeField(verbose_name='お問い合わせ日時', auto_now_add=True)
+
+    def __str__(self):
+        return self.subject

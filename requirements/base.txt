@@ -6,3 +6,4 @@ django-allauth
 pillow
 django-jazzmin
 django-boost
+django-import-export

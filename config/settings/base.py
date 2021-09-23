@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'django_boost',
+    'import_export',
 
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',

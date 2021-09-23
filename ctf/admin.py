@@ -1,14 +1,73 @@
 from django.contrib.auth import get_user_model
+from import_export import resources
+from import_export.admin import ImportExportMixin
+from import_export.fields import Field
 
 from .models import Problem, UserProblem, Information, Inquiry
 from django.contrib import admin
 
 
-class ProblemAdmin(admin.ModelAdmin):
+class ProblemResource(resources.ModelResource):
+    id = Field(attribute='id', column_name='id')
+    name = Field(attribute='name', column_name='name')
+    file = Field(attribute='file', column_name='file')
+    statement = Field(attribute='statement', column_name='statement')
+    genre = Field(attribute='genre', column_name='genre')
+    level = Field(attribute='level', column_name='level')
+    score = Field(attribute='score', column_name='score')
+    answer = Field(attribute='answer', column_name='answer')
+    created_at = Field(attribute='created_at', column_name='created_at')
+    updated_at = Field(attribute='updated_at', column_name='updated_at')
+
+    class Meta:
+        model = Problem
+        fields = ('id', 'name', 'file', 'statement', 'genre', 'level', 'score', 'answer', 'created_at', 'updated_at')
+
+
+class UserProblemResource(resources.ModelResource):
+    id = Field(attribute='id', column_name='id')
+    custom_user_id = Field(attribute='custom_user_id', column_name='custom_user_id')
+    problem_id = Field(attribute='problem_id', column_name='problem_id')
+    problem_correct_answer = Field(attribute='problem_correct_answer', column_name='problem_correct_answer')
+    corrected_at = Field(attribute='corrected_at', column_name='corrected_at')
+
+    class Meta:
+        model = UserProblem
+        fields = ('id', 'custom_user_id', 'problem_id', 'problem_correct_answer', 'corrected_at')
+
+
+class InformationResource(resources.ModelResource):
+    id = Field(attribute='id', column_name='id')
+    title = Field(attribute='title', column_name='title')
+    contents = Field(attribute='contents', column_name='contents')
+    created_at = Field(attribute='created_at', column_name='created_at')
+    updated_at = Field(attribute='updated_at', column_name='updated_at')
+
+    class Meta:
+        model = Information
+        fields = ('id', 'title', 'contents', 'created_at', 'updated_at')
+
+
+class InquiryResource(resources.ModelResource):
+    id = Field(attribute='id', column_name='id')
+    custom_user = Field(attribute='custom_user_id', column_name='custom_user_id')
+    subject = Field(attribute='subject', column_name='subject')
+    category = Field(attribute='category', column_name='category')
+    email = Field(attribute='email', column_name='email')
+    contents = Field(attribute='contents', column_name='contents')
+
+    class Meta:
+        model = Inquiry
+        fields = ('id', 'custom_user_id', 'subject', 'category', 'email', 'contents', 'created_at')
+
+
+class ProblemAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ('id', 'name', 'file', 'statement', 'genre', 'level', 'score', 'answer', 'created_at', 'updated_at')
     list_display_links = ('id', 'name')
     search_fields = ('id', 'name', 'file', 'statement', 'genre', 'level', 'score', 'answer', 'created_at', 'updated_at')
     list_filter = ('genre', 'level', 'score', 'created_at', 'updated_at')
+
+    resource_class = ProblemResource
 
     def save_model(self, request, obj, form, change):
         """モデル保存前にUserProblemにカラム追加"""
@@ -24,7 +83,7 @@ class ProblemAdmin(admin.ModelAdmin):
         UserProblem.objects.bulk_create(add_user_problem)
 
 
-class UserProblemAdmin(admin.ModelAdmin):
+class UserProblemAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = (
         'id', 'custom_user_id', 'problem_id', 'problem_correct_answer', 'corrected_at')
     list_display_links = ('id', 'custom_user_id', 'problem_id')
@@ -33,19 +92,25 @@ class UserProblemAdmin(admin.ModelAdmin):
         'corrected_at')
     list_filter = ('custom_user__username', 'problem__name', 'problem_correct_answer', 'corrected_at')
 
+    resource_class = UserProblemResource
 
-class InformationAdmin(admin.ModelAdmin):
+
+class InformationAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ('id', 'title', 'contents', 'created_at', 'updated_at')
     list_display_links = ('id', 'title')
     search_fields = ('id', 'title', 'contents', 'created_at', 'updated_at')
     list_filter = ('created_at', 'updated_at')
 
+    resource_class = InformationResource
 
-class InquiryAdmin(admin.ModelAdmin):
+
+class InquiryAdmin(ImportExportMixin, admin.ModelAdmin):
     list_display = ('id', 'custom_user_id', 'subject', 'category', 'email', 'contents', 'created_at')
     list_display_links = ('id', 'custom_user_id', 'subject')
     search_fields = ('id', 'custom_user_id', 'subject', 'category', 'email', 'contents', 'created_at')
     list_filter = ('category', 'created_at')
+
+    resource_class = InquiryResource
 
 
 admin.site.register(Problem, ProblemAdmin)

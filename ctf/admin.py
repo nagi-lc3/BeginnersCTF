@@ -80,7 +80,8 @@ class ProblemAdmin(ImportExportMixin, admin.ModelAdmin):
         for i in id_list:
             user_problem = UserProblem(custom_user_id=i, problem_id=obj.id)
             add_user_problem.append(user_problem)
-        UserProblem.objects.bulk_create(add_user_problem)
+        # ignore_conflicts=Trueにより更新時は何もしない（IDは増える）
+        UserProblem.objects.bulk_create(add_user_problem, ignore_conflicts=True)
 
 
 class UserProblemAdmin(ImportExportMixin, admin.ModelAdmin):

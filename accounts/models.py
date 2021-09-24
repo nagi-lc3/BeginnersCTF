@@ -10,5 +10,6 @@ class CustomUser(AbstractUser):
         verbose_name = verbose_name_plural = 'カスタムユーザー'
 
     score = models.IntegerField(verbose_name='点数', default=0)
+    score_updated_at = models.DateTimeField(verbose_name='点数更新日時', null=True, blank=True)
     ranking = models.IntegerField(verbose_name='ランキング', null=True, blank=True)
     icon = models.ImageField(verbose_name='アイコン', upload_to='icon/', default='icon/default.jpg')

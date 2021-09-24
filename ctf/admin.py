@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from import_export import resources
 from import_export.admin import ImportExportMixin
 from import_export.fields import Field
+from import_export.formats import base_formats
 
 from .models import Problem, UserProblem, Information, Inquiry
 from django.contrib import admin
@@ -67,6 +68,7 @@ class ProblemAdmin(ImportExportMixin, admin.ModelAdmin):
     search_fields = ('id', 'name', 'file', 'statement', 'genre', 'level', 'score', 'answer', 'created_at', 'updated_at')
     list_filter = ('genre', 'level', 'score', 'created_at', 'updated_at')
 
+    base_formats.CSV.CONTENT_TYPE = 'text/csv; charset=CP932'
     resource_class = ProblemResource
 
     def save_model(self, request, obj, form, change):
@@ -93,6 +95,7 @@ class UserProblemAdmin(ImportExportMixin, admin.ModelAdmin):
         'corrected_at')
     list_filter = ('custom_user__username', 'problem__name', 'problem_correct_answer', 'corrected_at')
 
+    base_formats.CSV.CONTENT_TYPE = 'text/csv; charset=CP932'
     resource_class = UserProblemResource
 
 
@@ -102,6 +105,7 @@ class InformationAdmin(ImportExportMixin, admin.ModelAdmin):
     search_fields = ('id', 'title', 'contents', 'created_at', 'updated_at')
     list_filter = ('created_at', 'updated_at')
 
+    base_formats.CSV.CONTENT_TYPE = 'text/csv; charset=CP932'
     resource_class = InformationResource
 
 
@@ -111,6 +115,7 @@ class InquiryAdmin(ImportExportMixin, admin.ModelAdmin):
     search_fields = ('id', 'custom_user_id', 'subject', 'category', 'email', 'contents', 'created_at')
     list_filter = ('category', 'created_at')
 
+    base_formats.CSV.CONTENT_TYPE = 'text/csv; charset=CP932'
     resource_class = InquiryResource
 
 

@@ -129,16 +129,29 @@ class ProblemDetailView(LoginRequiredMixin, View):
                     userproblem.corrected_at = datetime.datetime.now()
                     userproblem.save()
 
-                    # custom_userモデルを更新
+                    # custom_userモデルのスコアを更新
                     user = get_user_model().objects.get(id=self.request.user.id)
                     user.score += problem.score
+                    user.score_updated_at = datetime.datetime.now()
                     user.save()
+
+                    # custom_userモデルのランキングを更新
+                    update_custom_user = []
+                    # 点数と点数更新日時でソートしてカラムを全て取り出して配列で回す
+                    id_list = get_user_model().objects.values_list('id', flat=True).order_by('-score',
+                                                                                             'score_updated_at')
+                    # rank = インデックス, user_id = アイテム
+                    for rank, user_id in enumerate(id_list):
+                        custom_user = get_user_model()(id=user_id, ranking=rank + 1)
+                        update_custom_user.append(custom_user)
+                    get_user_model().objects.bulk_update(update_custom_user, fields=['ranking'])
 
                 # フラッシュメッセージを画面に表示
                 messages.success(request, "問題「{}」に正解しました。".format(problem.name))
 
                 # 問題一覧画面にリダイレクト
                 return HttpResponseRedirect(reverse('ctf:problem_list'))
+
             else:
                 # フラッシュメッセージを画面に表示
                 messages.error(request, "解答が違います。".format(problem.name))

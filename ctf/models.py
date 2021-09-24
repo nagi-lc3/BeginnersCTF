@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import RegexValidator
 from django.db import models
 
 
@@ -8,6 +9,8 @@ class Problem(models.Model):
     class Meta:
         db_table = 'problem'
         verbose_name = verbose_name_plural = '問題'
+
+    answer_regex = RegexValidator(regex=r'^ctf\{[\w]+\}$', message='正しい入力方式で入力してください。')
 
     GENRE = (
         ('crypto', 'Crypto'),
@@ -33,7 +36,7 @@ class Problem(models.Model):
     genre = models.CharField(verbose_name='問題ジャンル', choices=GENRE, max_length=255)
     level = models.IntegerField(verbose_name='問題難易度', choices=LEVEL)
     score = models.IntegerField(verbose_name='問題得点')
-    answer = models.CharField(verbose_name='問題解答', max_length=255)
+    answer = models.CharField(verbose_name='問題解答', validators=[answer_regex], max_length=255)
     created_at = models.DateTimeField(verbose_name='問題作成日時', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='問題更新日時', auto_now=True)
 

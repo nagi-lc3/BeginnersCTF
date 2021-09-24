@@ -4,6 +4,7 @@ from pathlib import Path
 ###############
 # Build paths #
 ###############
+from django.contrib import messages
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -150,6 +151,10 @@ MEDIA_URL = '/media/'
 #######################
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+}
 
 #######################
 # django-allauth #

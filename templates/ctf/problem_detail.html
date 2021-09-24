@@ -10,9 +10,18 @@
   <h3 class="font-weight-bold text-center white-text pb-2">問題詳細ページ</h3>
   <hr class="w-header white my-4">
 
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}" role="alert">
+    <span>{{ message }}</span>
+  </div>
+  {% endfor %}
+  {% endif %}
+
   <h3>問題名：{{ problem.name }}</h3>
   <p>問題内容：{{ problem.statement }}</p>
-  <p>添付ファイル：<a href="../../media/{{ problem.file }}" download>{{ problem.file|cut:"problems/"|default:'ファイルなし' }}</a></p>
+  <p>添付ファイル：<a href="../../media/{{ problem.file }}" download>{{ problem.file|cut:"problems/"|default:'ファイルなし' }}</a>
+  </p>
   <p>サンプル： ctf{SAMPLE_ANSWER}</p>
 
   <form method="post" class="">
@@ -35,7 +44,7 @@
     </div>
     {% endfor %}
     <div class="my-3">
-      <button class="primaryAction btn btn-primary btn-block waves-effect waves-light w-25" type="submit">更新</button>
+      <button class="primaryAction btn btn-primary btn-block waves-effect waves-light w-25" type="submit">解答送信</button>
     </div>
   </form>
 

@@ -1,3 +1,4 @@
+import datetime
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse_lazy, reverse
@@ -101,9 +102,9 @@ class ProblemDetailView(LoginRequiredMixin, View):
     template_name = 'ctf/problem_detail.html'
 
     def get(self, request, *args, **kwargs):
-        problem = get_object_or_404(Problem, pk=self.kwargs['pk'])
+        problem_pk = get_object_or_404(Problem, pk=self.kwargs['pk'])
         context = {
-            'problem': problem,
+            'problem': problem_pk,
             'form': ProblemDetailForm(),
         }
         # 各問題詳細ぺージへ
@@ -111,21 +112,42 @@ class ProblemDetailView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         form = ProblemDetailForm(request.POST)
-        problem = get_object_or_404(Problem, pk=self.kwargs['pk'])
+        problem_pk = get_object_or_404(Problem, pk=self.kwargs['pk'])
+        answer = request.POST.get('answer')
 
         if form.is_valid():
-            # answer = UserProblem.objects.get(custom_user_id=self.request.user.id, problem_id=self.kwargs['pk'])
+            problem = Problem.objects.get(id=self.kwargs['pk'])
 
-            # フラッシュメッセージを画面に表示
-            query_problem = Problem.objects.get(id=self.kwargs['pk'])
-            messages.success(request, "問題「{}」に正解しました。".format(query_problem.name))
+            if answer == problem.answer:
+                userproblem = UserProblem.objects.get(custom_user_id=self.request.user.id,
+                                                      problem_id=self.kwargs['pk'])
 
-            # 問題一覧画面にリダイレクト
-            return HttpResponseRedirect(reverse('ctf:problem_list'))
+                # はじめて問題に正解したときのみモデルを更新
+                if not userproblem.problem_correct_answer:
+                    # userProblemモデルを更新
+                    userproblem.problem_correct_answer = True
+                    userproblem.corrected_at = datetime.datetime.now()
+                    userproblem.save()
+
+                    # custom_userモデルを更新
+                    user = get_user_model().objects.get(id=self.request.user.id)
+                    user.score += problem.score
+                    user.save()
+
+                # フラッシュメッセージを画面に表示
+                messages.success(request, "問題「{}」に正解しました。".format(problem.name))
+
+                # 問題一覧画面にリダイレクト
+                return HttpResponseRedirect(reverse('ctf:problem_list'))
+            else:
+                # フラッシュメッセージを画面に表示
+                messages.error(request, "解答が違います。".format(problem.name))
+                # 問題詳細画面を再表示
+                return TemplateResponse(request, 'ctf/problem_detail.html', {'form': form, 'problem': problem_pk})
 
         if not form.is_valid():
-            # バリデーションNGの場合は問題詳細画面のテンプレートを再表示
-            return TemplateResponse(request, 'ctf/problem_detail.html', {'form': form, 'problem': problem})
+            # バリデーションNGの場合は問題詳細画面を再表示
+            return TemplateResponse(request, 'ctf/problem_detail.html', {'form': form, 'problem': problem_pk})
 
 
 problem_detail = ProblemDetailView.as_view()

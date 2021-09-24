@@ -17,6 +17,14 @@
   <h3 class="font-weight-bold text-center white-text pb-2">ログイン</h3>
   <hr class="w-header white my-4">
 
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}" role="alert">
+    <span>{{ message }}</span>
+  </div>
+  {% endfor %}
+  {% endif %}
+
   <div class="row d-flex align-items-center justify-content-center">
     <div class="card col-11 col-sm-10 col-md-8 col-lg-4">
       <div class="card-body z-depth-2 px-4">

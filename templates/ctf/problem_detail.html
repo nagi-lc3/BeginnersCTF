@@ -13,6 +13,31 @@
   <h3>問題名：{{ problem.name }}</h3>
   <p>問題内容：{{ problem.statement }}</p>
   <p>添付ファイル：<a href="../../media/{{ problem.file }}" download>{{ problem.file|cut:"problems/"|default:'ファイルなし' }}</a></p>
+  <p>サンプル： ctf{SAMPLE_ANSWER}</p>
+
+  <form method="post" class="">
+    {% csrf_token %}
+
+    {% for field in form %}
+    <div>
+      {{ field }}
+      {% if field.errors %}
+      {% for error in field.errors %}
+      <div class="error-feedback">{{ error }}</div>
+      {% endfor %}
+      {% endif %}
+    </div>
+    {% endfor %}
+
+    {% for non_field_error in form.non_field_errors %}
+    <div class="error-feedback">
+      {{ non_field_error }}
+    </div>
+    {% endfor %}
+    <div class="my-3">
+      <button class="primaryAction btn btn-primary btn-block waves-effect waves-light w-25" type="submit">更新</button>
+    </div>
+  </form>
 
 </div>
 {% endblock %}

@@ -1,10 +1,14 @@
-from .forms import UsernameChangeForm
+from django.http import HttpResponseRedirect
+from django.template.response import TemplateResponse
+from django.urls import reverse_lazy, reverse
+
+from .forms import UsernameChangeForm, ProblemDetailForm
 from .models import Information, Problem, UserProblem
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView
-from django.shortcuts import render, redirect
+from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 
 
@@ -92,9 +96,36 @@ class MyPageView(LoginRequiredMixin, View):
 my_page = MyPageView.as_view()
 
 
-class ProblemDetailView(LoginRequiredMixin, DetailView):
+class ProblemDetailView(LoginRequiredMixin, View):
     model = Problem
     template_name = 'ctf/problem_detail.html'
+
+    def get(self, request, *args, **kwargs):
+        problem = get_object_or_404(Problem, pk=self.kwargs['pk'])
+        context = {
+            'problem': problem,
+            'form': ProblemDetailForm(),
+        }
+        # 各問題詳細ぺージへ
+        return TemplateResponse(request, 'ctf/problem_detail.html', context)
+
+    def post(self, request, *args, **kwargs):
+        form = ProblemDetailForm(request.POST)
+        problem = get_object_or_404(Problem, pk=self.kwargs['pk'])
+
+        if form.is_valid():
+            # answer = UserProblem.objects.get(custom_user_id=self.request.user.id, problem_id=self.kwargs['pk'])
+
+            # フラッシュメッセージを画面に表示
+            query_problem = Problem.objects.get(id=self.kwargs['pk'])
+            messages.success(request, "問題「{}」に正解しました。".format(query_problem.name))
+
+            # 問題一覧画面にリダイレクト
+            return HttpResponseRedirect(reverse('ctf:problem_list'))
+
+        if not form.is_valid():
+            # バリデーションNGの場合は問題詳細画面のテンプレートを再表示
+            return TemplateResponse(request, 'ctf/problem_detail.html', {'form': form, 'problem': problem})
 
 
 problem_detail = ProblemDetailView.as_view()

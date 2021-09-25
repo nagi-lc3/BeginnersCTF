@@ -18,13 +18,14 @@
   {% endfor %}
   {% endif %}
 
-  <h3>問題名：{{ problem.name }}</h3>
-  <p>問題内容：{{ problem.statement }}</p>
-  <p>添付ファイル：<a href="../../media/{{ problem.file }}" download>{{ problem.file|cut:"problems/"|default:'ファイルなし' }}</a>
-  </p>
-  <p>サンプル： ctf{SAMPLE_ANSWER}</p>
+  <div class="card p-5 bg-info">
+    <h3>{{ problem.name }}</h3>
+    <p>{{ problem.statement|linebreaksbr }}</p>
+    <p><a href="../../media/{{ problem.file }}" download>{{ problem.file|cut:"problems/"|default:'ファイルなし' }}</a>
+    </p>
+  </div>
 
-  <form method="post" class="">
+  <form method="post" class="p-5">
     {% csrf_token %}
 
     {% for field in form %}
@@ -43,8 +44,9 @@
       {{ non_field_error }}
     </div>
     {% endfor %}
+
     <div class="my-3">
-      <button class="primaryAction btn btn-primary btn-block waves-effect waves-light w-25" type="submit">解答送信</button>
+      <button class="primaryAction btn btn-primary btn-block waves-effect waves-light w-100 p-4" type="submit">解答送信</button>
     </div>
   </form>
 

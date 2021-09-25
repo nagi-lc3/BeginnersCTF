@@ -13,7 +13,8 @@ class ProblemDetailForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['answer'].widget.attrs = {'placeholder': '答え'}
+        self.fields['answer'].widget.attrs = {'placeholder': 'ctf{sample_answer}',
+                                              'class': 'w-100 p-1'}
 
 
 class UsernameChangeForm(forms.ModelForm):

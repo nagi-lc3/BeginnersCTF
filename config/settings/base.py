@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'django_boost',
     'import_export',
+    'django_tables2',
 
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
@@ -152,6 +153,7 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# メッセージタグの設定
 MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
@@ -200,8 +202,7 @@ ACCOUNT_ADAPTER = 'accounts.adapter.AccountAdapter'
 # django-tables2 #
 ##################
 
-# DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
-
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap4.html"
 
 ###################
 # Stripe settings #

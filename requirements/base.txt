@@ -7,3 +7,4 @@ pillow
 django-jazzmin
 django-boost
 django-import-export
+django-tables2

@@ -1,8 +1,13 @@
 import datetime
 import logging
+
+import django_tables2
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse_lazy, reverse
+from django.utils.html import format_html, escape
+from django.utils.safestring import mark_safe
+from django_tables2 import tables, RequestConfig
 
 from .forms import UsernameChangeForm, ProblemDetailForm, InquiryForm
 from .models import Information, Problem, UserProblem
@@ -34,8 +39,35 @@ class InformationListView(ListView):
 information = InformationListView.as_view()
 
 
-class RankingView(LoginRequiredMixin, TemplateView):
-    template_name = 'ctf/ranking.html'
+class ImageColumn(django_tables2.Column):
+    """アイコンのフォーマット"""
+
+    def render(self, value):
+        return mark_safe('<img src="/media/%s" height="25px" class="rounded-circle border me-1" />' % escape(value))
+
+
+class RankingTable(tables.Table):
+    """ユーザテーブルのランキング表示"""
+
+    icon = ImageColumn('アイコン')
+
+    class Meta:
+        model = get_user_model()
+        fields = ('icon', 'ranking', 'username', 'score')
+
+
+class RankingView(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        queryset = get_user_model().objects.order_by('ranking')
+        # テーブルオブジェクトを作成
+        table = RankingTable(queryset)
+        RequestConfig(request).configure(table)
+        table.paginate(page=request.GET.get('page', 1), per_page=100)
+        context = {
+            'table': table,
+        }
+        return TemplateResponse(request, 'ctf/ranking.html', context)
 
 
 ranking = RankingView.as_view()

@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load django_tables2 %}
 
 {% block page_title %}BeginnersCTF | ランキング{% endblock %}
 
@@ -9,5 +10,17 @@
   <h6 class="font-weight-bold text-center grey-text text-uppercase small mb-4">ranking</h6>
   <h3 class="font-weight-bold text-center white-text pb-2">ランキングページ</h3>
   <hr class="w-header white my-4">
+
+  <!-- ウィンドウサイズに合わせて枠の大きさを変える -->
+  <div class="container-fluid">
+    <!-- 水平方向の横スクロールバーを加える -->
+    <div class="table-responsive col-auto">
+      <!-- 縞ストライプで見やすくする -->
+      <table class="table table-striped">
+        {% render_table table %}
+      </table>
+    </div>
+  </div>
+
 </div>
 {% endblock %}

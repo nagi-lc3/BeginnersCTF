@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load bootstrap5 %}
 {% load static %}
 
 {% block page_title %}BeginnersCTF | お問い合わせ{% endblock %}
@@ -21,28 +22,12 @@
   <form method="post" class="">
     {% csrf_token %}
 
-    {% for field in form %}
-    <div class="form-group">
-      <label>{{ field.label }}</label>
-      {{ field }}
-      {% if field.errors %}
-      {% for error in field.errors %}
-      <div class="error-feedback">{{ error }}</div>
-      {% endfor %}
-      {% endif %}
-    </div>
-    {% endfor %}
+    {% bootstrap_form form %}
 
-    {% for non_field_error in form.non_field_errors %}
-    <div class="error-feedback">
-      {{ non_field_error }}
-    </div>
-    {% endfor %}
-
-    <div class="my-3">
-      <button class="primaryAction btn btn-primary btn-block waves-effect waves-light w-100 p-4" type="submit">送信
-      </button>
-    </div>
+    {% buttons %}
+    <button class="primaryAction btn btn-primary btn-block waves-effect waves-light w-100 p-4" type="submit">送信
+    </button>
+    {% endbuttons %}
   </form>
 
 </div>

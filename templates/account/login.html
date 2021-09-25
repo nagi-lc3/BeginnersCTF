@@ -1,11 +1,8 @@
 {% extends "base.html" %}
+{% load bootstrap5 %}
 {% load static %}
 
 {% block page_title %} BeginnersCTF | ログイン{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/account.css' %}"/>
-{% endblock %}
 
 {% load i18n %}
 
@@ -34,30 +31,32 @@
           {% include "socialaccount/snippets/provider_list.html" with process="login" %}
         </ul>
 
+        <hr>
+
         <!-- ログイン　-->
         <form class="login" method="POST" action="{% url 'account_login' %}">
           {% csrf_token %}
 
-          <table class="table">
-            {{ form.as_table }}
-          </table>
+          {% bootstrap_form form %}
 
           {% if redirect_field_value %}
           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
           {% endif %}
 
-          <div class="my-3">
-            <button class="primaryAction btn btn-primary btn-block waves-effect waves-light" type="submit">ログイン</button>
-          </div>
+          <hr>
+
+          {% buttons %}
+          <button class="primaryAction btn btn-primary btn-block waves-effect waves-light" type="submit">ログイン</button>
+          {% endbuttons %}
         </form>
 
         <!-- 新規会員登録 -->
-        <div class="my-3">
-          <a href="{{ signup_url }}">
-            <button class="primaryAction btn btn-primary btn-block waves-effect waves-light" type="submit">サインアップ
-            </button>
-          </a>
-        </div>
+        {% buttons %}
+        <a href="{{ signup_url }}">
+          <button class="primaryAction btn btn-primary btn-block waves-effect waves-light" type="submit">サインアップ
+          </button>
+        </a>
+        {% endbuttons %}
 
         <!-- パスワード忘れ -->
         <div class="my-3">

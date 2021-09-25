@@ -19,7 +19,13 @@ class AccountAdapter(DefaultAccountAdapter):
             add_user_problem.append(user_problem)
         UserProblem.objects.bulk_create(add_user_problem)
 
-        # ユーザの数をカウントしてデフォルトでランキングを設定する
-        user = get_user_model().objects.get(id=user.id)
-        user.ranking = get_user_model().objects.all().count()
-        user.save()
+        # custom_userモデルのランキングを更新
+        update_custom_user = []
+        # 点数と点数更新日時でソートしてカラムを全て取り出して配列で回す
+        id_list = get_user_model().objects.values_list('id', flat=True).order_by('-score',
+                                                                                 'score_updated_at')
+        # rank = インデックス, user_id = アイテム
+        for rank, user_id in enumerate(id_list):
+            custom_user = get_user_model()(id=user_id, ranking=rank + 1)
+            update_custom_user.append(custom_user)
+        get_user_model().objects.bulk_update(update_custom_user, fields=['ranking'])

@@ -3,13 +3,19 @@
     text-transform:capitalize;
 }
 
-
 /* listFilter.jsの設定 */
 .search_item.is-active {
   color: white;
   background-color: black;
 }
 
+/* listFilter.jsの設定 */
 .is-hide {
   display: none;
+}
+
+/* バリデーションエラーの位置調整 */
+.invalid-feedback {
+    position: relative !important;
+    margin-top: 0px
 }

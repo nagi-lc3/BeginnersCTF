@@ -53,7 +53,7 @@ class RankingTable(tables.Table):
 
     class Meta:
         model = get_user_model()
-        fields = ('icon', 'ranking', 'username', 'score')
+        fields = ('ranking', 'icon', 'username', 'score')
 
 
 class RankingView(LoginRequiredMixin, View):
@@ -100,7 +100,9 @@ class InquiryView(FormView):
     def form_valid(self, form):
         form.send_email()
         messages.success(self.request, 'メッセージを送信しました。')
+        # ロギング
         logger.info('Inquiry sent by {}'.format(form.cleaned_data['name']))
+        # モデルに登録
         form.save()
         return super().form_valid(form)
 
@@ -189,6 +191,10 @@ class ProblemDetailView(LoginRequiredMixin, View):
                         custom_user = get_user_model()(id=user_id, ranking=rank + 1)
                         update_custom_user.append(custom_user)
                     get_user_model().objects.bulk_update(update_custom_user, fields=['ranking'])
+
+                # ロギング
+                logger.info(
+                    "User(id={0}) answered Problem(id={1}) correctly.".format(self.request.user.id, self.kwargs['pk']))
 
                 # フラッシュメッセージを画面に表示
                 messages.success(request, "問題「{}」に正解しました。".format(problem.name))

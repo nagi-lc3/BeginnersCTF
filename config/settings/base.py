@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django_boost',
     'import_export',
     'django_tables2',
+    'bootstrap5',
 
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
@@ -197,6 +198,14 @@ ACCOUNT_ADAPTER = 'accounts.adapter.AccountAdapter'
 # バックアップパッチ用
 # BACKUP_PATH = 'backup/'
 # NUM_SAVED_BACKUP = 30
+
+##################
+# django-bootstrap5 #
+##################
+
+BOOTSTRAP5 = {
+    'set_placeholder': False,
+}
 
 ##################
 # django-tables2 #

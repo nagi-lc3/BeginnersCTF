@@ -36,7 +36,7 @@ class InquiryForm(forms.ModelForm):
         self.fields['email'].widget.attrs = {'placeholder': 'メールアドレスを入力してください。'}
         self.fields['subject'].widget.attrs = {'placeholder': '件名を入力してください。'}
         self.fields['contents'].widget.attrs = {'placeholder': 'お問い合わせ内容を入力してください。',
-                                                'rows': 15}
+                                                'rows': 10}
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control mb-3'
 

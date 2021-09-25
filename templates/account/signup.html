@@ -1,11 +1,8 @@
 {% extends "base.html" %}
+{% load bootstrap5 %}
 {% load static %}
 
 {% block page_title %} BeginnersCTF | サインアップ{% endblock %}
-
-{% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/account.css' %}"/>
-{% endblock %}
 
 {% load i18n %}
 
@@ -24,16 +21,16 @@
         <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
           {% csrf_token %}
 
-          <table class="table">
-            {{ form.as_table }}
-          </table>
+          {% bootstrap_form form %}
 
           {% if redirect_field_value %}
           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
           {% endif %}
-          <div class="my-3">
-            <button type="submit" class="primaryAction btn btn-primary btn-block waves-effect waves-light">登録</button>
-          </div>
+
+          {% buttons %}
+          <button type="submit" class="primaryAction btn btn-primary btn-block waves-effect waves-light">ユーザー登録
+          </button>
+          {% endbuttons %}
         </form>
 
       </div>

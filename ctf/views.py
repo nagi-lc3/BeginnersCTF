@@ -1,9 +1,10 @@
 import datetime
+import logging
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse_lazy, reverse
 
-from .forms import UsernameChangeForm, ProblemDetailForm
+from .forms import UsernameChangeForm, ProblemDetailForm, InquiryForm
 from .models import Information, Problem, UserProblem
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,6 +12,8 @@ from django.views import View
 from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+
+logger = logging.getLogger(__name__)
 
 
 class IndexView(TemplateView):
@@ -57,8 +60,17 @@ class BoardView(LoginRequiredMixin, TemplateView):
 board = BoardView.as_view()
 
 
-class InquiryView(TemplateView):
+class InquiryView(FormView):
     template_name = 'ctf/inquiry.html'
+    form_class = InquiryForm
+    success_url = reverse_lazy('ctf:inquiry')
+
+    def form_valid(self, form):
+        form.send_email()
+        messages.success(self.request, 'メッセージを送信しました。')
+        logger.info('Inquiry sent by {}'.format(form.cleaned_data['name']))
+        form.save()
+        return super().form_valid(form)
 
 
 inquiry = InquiryView.as_view()

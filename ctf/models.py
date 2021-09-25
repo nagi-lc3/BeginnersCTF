@@ -93,20 +93,9 @@ class Inquiry(models.Model):
         db_table = 'inquiry'
         verbose_name = verbose_name_plural = 'お問い合わせ'
 
-    CATEGORY = (
-        ('1', 'category1'),
-        ('2', 'category2'),
-        ('3', 'category3'),
-        ('4', 'category4'),
-        ('5', 'category5'),
-    )
-
-    # リレーション（CustomUserモデルと多対1）
-    custom_user = models.ForeignKey(get_user_model(), verbose_name='ユーザ名', on_delete=models.PROTECT)
-
-    subject = models.CharField(verbose_name='お問い合わせ件名', max_length=255)
-    category = models.CharField(verbose_name='お問い合わせカテゴリ', choices=CATEGORY, max_length=255)
+    name = models.CharField(verbose_name='名前', max_length=100)
     email = models.EmailField(verbose_name='メールアドレス')
+    subject = models.CharField(verbose_name='お問い合わせ件名', max_length=100)
     contents = models.TextField(verbose_name='お問い合わせ内容')
     created_at = models.DateTimeField(verbose_name='お問い合わせ日時', auto_now_add=True)
 

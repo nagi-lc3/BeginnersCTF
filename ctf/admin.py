@@ -51,15 +51,14 @@ class InformationResource(resources.ModelResource):
 
 class InquiryResource(resources.ModelResource):
     id = Field(attribute='id', column_name='id')
-    custom_user = Field(attribute='custom_user_id', column_name='custom_user_id')
-    subject = Field(attribute='subject', column_name='subject')
-    category = Field(attribute='category', column_name='category')
+    name = Field(attribute='name', column_name='name')
     email = Field(attribute='email', column_name='email')
+    subject = Field(attribute='subject', column_name='subject')
     contents = Field(attribute='contents', column_name='contents')
 
     class Meta:
         model = Inquiry
-        fields = ('id', 'custom_user_id', 'subject', 'category', 'email', 'contents', 'created_at')
+        fields = ('id', 'name', 'email', 'subject', 'contents', 'created_at')
 
 
 class ProblemAdmin(ImportExportMixin, admin.ModelAdmin):
@@ -110,10 +109,10 @@ class InformationAdmin(ImportExportMixin, admin.ModelAdmin):
 
 
 class InquiryAdmin(ImportExportMixin, admin.ModelAdmin):
-    list_display = ('id', 'custom_user_id', 'subject', 'category', 'email', 'contents', 'created_at')
-    list_display_links = ('id', 'custom_user_id', 'subject')
-    search_fields = ('id', 'custom_user_id', 'subject', 'category', 'email', 'contents', 'created_at')
-    list_filter = ('category', 'created_at')
+    list_display = ('id', 'name', 'email', 'subject', 'contents', 'created_at')
+    list_display_links = ('id', 'name',)
+    search_fields = ('id', 'name', 'email', 'subject', 'contents', 'created_at')
+    list_filter = ('name', 'email', 'created_at')
 
     base_formats.CSV.CONTENT_TYPE = 'text/csv; charset=CP932'
     resource_class = InquiryResource

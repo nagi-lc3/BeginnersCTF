@@ -10,26 +10,40 @@
   <h3 class="font-weight-bold text-center white-text pb-2">お問い合わせページ</h3>
   <hr class="w-header white my-4">
 
-  <form method="post">
-        {% csrf_token %}
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }}" role="alert">
+    <span>{{ message }}</span>
+  </div>
+  {% endfor %}
+  {% endif %}
 
-        {{ form.non_field_errors }}
+  <form method="post" class="">
+    {% csrf_token %}
 
-        {% for field in form %}
-          <div class="form-group row">
-            <label for="{{ field.id_for_label }}" class="col-sm-4 col-form-label">
-              <strong>{{ field.label_tag }}</strong>
-            </label>
-            <div class="col-sm-8">
-              {{ field }}
-              {{ field.errors }}
-            </div>
-          </div>
-        {% endfor %}
+    {% for field in form %}
+    <div class="form-group">
+      <label>{{ field.label }}</label>
+      {{ field }}
+      {% if field.errors %}
+      {% for error in field.errors %}
+      <div class="error-feedback">{{ error }}</div>
+      {% endfor %}
+      {% endif %}
+    </div>
+    {% endfor %}
 
-        <div class="offset-sm-4 col-sm-8">
-          <button class="btn btn-primary" type="submit">送信</button>
-        </div>
-      </form>
+    {% for non_field_error in form.non_field_errors %}
+    <div class="error-feedback">
+      {{ non_field_error }}
+    </div>
+    {% endfor %}
+
+    <div class="my-3">
+      <button class="primaryAction btn btn-primary btn-block waves-effect waves-light w-100 p-4" type="submit">送信
+      </button>
+    </div>
+  </form>
+
 </div>
 {% endblock %}

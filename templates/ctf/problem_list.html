@@ -40,7 +40,7 @@
             <p class="card-text btn-text-size">ジャンル：{{ userproblem.problem.genre }}</p>
             <p class="card-text">レベル：{{ userproblem.problem.level }}</p>
             <p class="card-text">点数：{{ userproblem.problem.score }}</p>
-            <p class="card-text">{{ userproblem.problem_correct_answer|yesno:'解答済み☑, 未回答□' }}</p>
+            <p class="card-text check-solved">{{ userproblem.problem_correct_answer|yesno:'解答済み☑, 未回答□' }}</p>
           </div>
         </a>
       </div>
@@ -49,5 +49,10 @@
   </div>
 
 </div>
+
+{% block extra_js %}
+<script type="text/javascript" src="{% static 'js/filterList.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/checkSolved.js' %}"></script>
+{% endblock %}
 
 {% endblock %}

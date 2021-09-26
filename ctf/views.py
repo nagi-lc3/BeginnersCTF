@@ -48,7 +48,7 @@ class ImageColumn(django_tables2.Column):
 
     def render(self, value):
         return mark_safe(
-            '<img src="/media/%s" class="rounded-circle border me-1" height="25" alt="" loading="lazy" />'
+            '<img src="/media/%s" class="rounded-circle border me-1" width="40" height="40" alt="" loading="lazy" />'
             % escape(value))
 
 
@@ -167,7 +167,7 @@ class MyPageView(LoginRequiredMixin, View):
                 user = get_user_model().objects.get(username=request.user.username)
                 user.icon = icon
                 user.save()
-                
+
                 # メッセージ
                 messages.info(request, "ユーザー情報を変更しました。")
                 return redirect('ctf:my_page')

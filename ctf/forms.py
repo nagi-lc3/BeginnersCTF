@@ -1,4 +1,5 @@
 from django.core.mail import EmailMessage
+from django.forms import ImageField
 
 from .models import Problem, Inquiry
 from django import forms
@@ -61,7 +62,7 @@ class InquiryForm(forms.ModelForm):
 
 class MyPageForm(forms.ModelForm):
     """マイページフォーム"""
-    username = forms.CharField(max_length=30, required=False, label='ユーザ名')
+    username = forms.CharField(label='ユーザ名', max_length=30)
 
     class Meta:
         model = User

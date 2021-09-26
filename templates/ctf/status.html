@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% load bootstrap5 %}
+{% load static %}
+
+{% block page_title %}BeginnersCTF | ステータス{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+  <!-- タイトル -->
+  <h6 class="font-weight-bold text-center grey-text text-uppercase small mb-4">status</h6>
+  <h3 class="font-weight-bold text-center white-text pb-2">ステータス</h3>
+  <hr class="w-header white my-4">
+
+  {% bootstrap_messages %}
+
+  <div class="card p-5">
+    <h3 class="mb-5">ステータス</h3>
+    <div class="row">
+
+      <div class="col-6">
+        <p><img src="{{ user.icon_thumbnail.url }}" class="rounded-circle border me-1" width="300" height="300" alt=""
+                loading="lazy">
+        </p>
+      </div>
+
+      <div class="col-6">
+        <h1>{{ user.username }}</h1>
+      </div>
+
+      <hr>
+
+      <p>ALL</p>
+      <p>全て：{{ all_count }}</p>
+      <p>解答済み：{{ solved_all_count }}</p>
+      <p>達成度：{{ all_per }}%</p>
+
+      <hr>
+
+      <p>Crypto</p>
+      <p>全て：{{ crypto_count }}</p>
+      <p>解答済み：{{ solved_crypto_count }}</p>
+      <p>達成度：{{ crypto_per }}%</p>
+
+      <hr>
+
+      <p>Forensics</p>
+      <p>全て：{{ forensics_count }}</p>
+      <p>解答済み：{{ solved_forensics_count }}</p>
+      <p>達成度：{{ forensics_per }}%</p>
+
+      <hr>
+
+      <p>Reversing</p>
+      <p>全て：{{ reversing_count }}</p>
+      <p>解答済み：{{ solved_reversing_count }}</p>
+      <p>達成度：{{ reversing_per }}%</p>
+
+      <hr>
+
+      <p>Pwnable</p>
+      <p>全て：{{ pwnable_count }}</p>
+      <p>解答済み：{{ solved_pwnable_count }}</p>
+      <p>達成度：{{ pwnable_per }}%</p>
+
+      <hr>
+
+      <p>Web</p>
+      <p>全て：{{ web_count }}</p>
+      <p>解答済み：{{ solved_web_count }}</p>
+      <p>達成度：{{ web_per }}%</p>
+
+      <hr>
+
+      <p>Network</p>
+      <p>全て：{{ network_count }}</p>
+      <p>解答済み：{{ solved_network_count }}</p>
+      <p>達成度：{{ network_per }}%</p>
+
+      <hr>
+
+      <p>Misc</p>
+      <p>全て：{{ misc_count }}</p>
+      <p>解答済み：{{ solved_misc_count }}</p>
+      <p>達成度：{{ misc_per }}%</p>
+
+      <hr>
+
+      <p>レベル0</p>
+      <p>全て：{{ level0_count }}</p>
+      <p>解答済み：{{ solved_level0_count }}</p>
+      <p>達成度：{{ level0_per }}%</p>
+
+      <hr>
+
+      <p>レベル1</p>
+      <p>全て：{{ level1_count }}</p>
+      <p>解答済み：{{ solved_level1_count }}</p>
+      <p>達成度：{{ level1_per }}%</p>
+
+      <hr>
+
+      <p>レベル2</p>
+      <p>全て：{{ level2_count }}</p>
+      <p>解答済み：{{ solved_level2_count }}</p>
+      <p>達成度：{{ level2_per }}%</p>
+
+      <hr>
+
+      <p>レベル3</p>
+      <p>全て：{{ level3_count }}</p>
+      <p>解答済み：{{ solved_level3_count }}</p>
+      <p>達成度：{{ level3_per }}%</p>
+
+      <hr>
+
+      <p>レベル4</p>
+      <p>全て：{{ level4_count }}</p>
+      <p>解答済み：{{ solved_level4_count }}</p>
+      <p>達成度：{{ level4_per }}%</p>
+
+      <hr>
+
+      <p>レベル5</p>
+      <p>全て：{{ level5_count }}</p>
+      <p>解答済み：{{ solved_level5_count }}</p>
+      <p>達成度：{{ level5_per }}%</p>
+
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

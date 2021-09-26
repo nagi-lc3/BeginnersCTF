@@ -73,13 +73,16 @@
       <!-- アイコン -->
       <a class="nav-link dropdown-toggle align-items-center hidden-arrow m-0 px-0" href="#" id="navbarDropdownMenuLink"
          role="button" data-mdb-toggle="dropdown" aria-expanded="false">
-        <img src="{{ user.icon_thumbnail.url }}" class="rounded-circle border me-1" width="40" height="40" alt=""
-             loading="lazy"/>{{ user.username }} ( {{ user.ranking }}位 - {{ user.score }}点 )
+        <img src="{{ request.user.icon_thumbnail.url }}" class="rounded-circle border me-1" width="40" height="40" alt=""
+             loading="lazy"/>{{ request.user.username }} ( {{ request.user.ranking }}位 - {{ request.user.score }}点 )
         <span class="dropdown-toggle"></span>
       </a>
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
         <li>
           <a class="dropdown-item" href="{% url 'ctf:my_page' %}">マイページ</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="{% url 'ctf:status'　user.pk %}">ステータス</a>
         </li>
         <li>
           <a class="dropdown-item" href="{% url 'account_logout' %}">ログアウト</a>

@@ -18,6 +18,8 @@ from django.views.generic import TemplateView, ListView, DetailView, FormView, U
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 
+User = get_user_model()
+
 logger = logging.getLogger(__name__)
 
 
@@ -49,7 +51,7 @@ class ImageColumn(django_tables2.Column):
     def render(self, value):
         return mark_safe(
             '<img src="/media/%s" class="rounded-circle border me-1" width="40" height="40" alt="" loading="lazy" />'
-            % escape(value))
+            % (escape(value),))
 
 
 class RankingTable(tables.Table):
@@ -58,7 +60,7 @@ class RankingTable(tables.Table):
     icon = ImageColumn('アイコン')
 
     class Meta:
-        model = get_user_model()
+        model = User
         fields = ('ranking', 'icon', 'username', 'score')
 
 
@@ -66,7 +68,7 @@ class RankingView(LoginRequiredMixin, View):
     """ランキングページ"""
 
     def get(self, request, *args, **kwargs):
-        queryset = get_user_model().objects.order_by('ranking')
+        queryset = User.objects.order_by('ranking')
         # テーブルオブジェクトを作成
         table = RankingTable(queryset)
         RequestConfig(request).configure(table)
@@ -125,7 +127,7 @@ class MyPageView(LoginRequiredMixin, View):
     """マイページ"""
 
     def get(self, request, *args, **kwargs):
-        queryset = get_user_model().objects.get(id=request.user.id)
+        queryset = User.objects.get(id=request.user.id)
         initial_data = {
             'icon': queryset.icon,
             'username': queryset.username,
@@ -145,7 +147,7 @@ class MyPageView(LoginRequiredMixin, View):
             username = form.cleaned_data["username"]
 
             # モデル変更
-            user = get_user_model().objects.get(username=request.user.username)
+            user = User.objects.get(username=request.user.username)
             # ファイルを選択しない時はアイコンは変更しない
             if icon != 'icon/default.jpg':
                 user.icon = icon
@@ -164,7 +166,7 @@ class MyPageView(LoginRequiredMixin, View):
             # ファイルを選択しない時はアイコンは変更しない
             if icon != 'icon/default.jpg':
                 # モデル変更
-                user = get_user_model().objects.get(username=request.user.username)
+                user = User.objects.get(username=request.user.username)
                 user.icon = icon
                 user.save()
 
@@ -177,6 +179,344 @@ class MyPageView(LoginRequiredMixin, View):
 
 
 my_page = MyPageView.as_view()
+
+
+class StatusView(LoginRequiredMixin, View):
+    """ステータスページ"""
+
+    model = User
+    template_name = 'ctf/status.html'
+
+    def get(self, request, *args, **kwargs):
+        user_pk = get_object_or_404(User, pk=self.kwargs['pk'])
+
+        # ALL
+        all_count = User.objects.all().prefetch_related('userproblem').filter(
+            userproblem__custom_user_id=self.request.user.id
+        ).count()
+
+        solved_all_count = User.objects.all().prefetch_related('userproblem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True
+        ).count()
+
+        try:
+            all_per = round((solved_all_count / all_count) * 100)
+        except ZeroDivisionError:
+            all_per = 0
+
+        # Crypto
+        crypto_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__genre='crypto'
+        ).count()
+
+        solved_crypto_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__genre='crypto'
+        ).count()
+
+        try:
+            crypto_per = round((solved_crypto_count / crypto_count) * 100)
+        except ZeroDivisionError:
+            crypto_per = 0
+
+        # Forensics
+        forensics_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__genre='forensics'
+        ).count()
+
+        solved_forensics_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__genre='forensics'
+        ).count()
+
+        try:
+            forensics_per = round((solved_forensics_count / forensics_count) * 100)
+        except ZeroDivisionError:
+            forensics_per = 0
+
+        # Reversing
+        reversing_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__genre='reversing'
+        ).count()
+
+        solved_reversing_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__genre='reversing'
+        ).count()
+
+        try:
+            reversing_per = round((solved_reversing_count / reversing_count) * 100)
+        except ZeroDivisionError:
+            reversing_per = 0
+
+        # Pwnable
+        pwnable_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__genre='pwnable'
+        ).count()
+
+        solved_pwnable_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__genre='pwnable'
+        ).count()
+
+        try:
+            pwnable_per = round((solved_pwnable_count / pwnable_count) * 100)
+        except ZeroDivisionError:
+            pwnable_per = 0
+
+        # Web
+        web_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__genre='web'
+        ).count()
+
+        solved_web_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__genre='web'
+        ).count()
+
+        try:
+            web_per = round((solved_web_count / web_count) * 100)
+        except ZeroDivisionError:
+            web_per = 0
+
+        # Network
+        network_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__genre='network'
+        ).count()
+
+        solved_network_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__genre='network'
+        ).count()
+
+        try:
+            network_per = round((solved_network_count / network_count) * 100)
+        except ZeroDivisionError:
+            network_per = 0
+
+        # Misc
+        misc_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__genre='misc'
+        ).count()
+
+        solved_misc_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__genre='misc'
+        ).count()
+
+        try:
+            misc_per = round((solved_misc_count / misc_count) * 100)
+        except ZeroDivisionError:
+            misc_per = 0
+
+        # レベル0
+        level0_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__level='0'
+        ).count()
+
+        solved_level0_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__level='0'
+        ).count()
+
+        try:
+            level0_per = round((solved_level0_count / level0_count) * 100)
+        except ZeroDivisionError:
+            level0_per = 0
+
+        # レベル1
+        level1_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__level='1'
+        ).count()
+
+        solved_level1_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__level='1'
+        ).count()
+
+        try:
+            level1_per = round((solved_level1_count / level1_count) * 100)
+        except ZeroDivisionError:
+            level1_per = 0
+
+        # レベル2
+        level2_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__level='2'
+        ).count()
+
+        solved_level2_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__level='2'
+        ).count()
+
+        try:
+            level2_per = round((solved_level2_count / level2_count) * 100)
+        except ZeroDivisionError:
+            level2_per = 0
+
+        # レベル3
+        level3_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__level='3'
+        ).count()
+
+        solved_level3_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__level='3'
+        ).count()
+
+        try:
+            level3_per = round((solved_level3_count / level3_count) * 100)
+        except ZeroDivisionError:
+            level3_per = 0
+
+        # レベル4
+        level4_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__level='4'
+        ).count()
+
+        solved_level4_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__level='4'
+        ).count()
+
+        try:
+            level4_per = round((solved_level4_count / level4_count) * 100)
+        except ZeroDivisionError:
+            level4_per = 0
+
+        # レベル5
+        level5_count = User.objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            problem__level='5'
+        ).count()
+
+        solved_level5_count = get_user_model().objects.all().prefetch_related('userproblem').select_related(
+            'problem').filter(
+            userproblem__custom_user_id=self.request.user.id,
+            userproblem__problem_correct_answer=True,
+            problem__level='5'
+        ).count()
+
+        try:
+            level5_per = round((solved_level5_count / level5_count) * 100)
+        except ZeroDivisionError:
+            level5_per = 0
+
+        context = {
+            'user': user_pk,
+
+            'all_count': all_count,
+            'solved_all_count': solved_all_count,
+            'all_per': all_per,
+
+            'crypto_count': crypto_count,
+            'solved_crypto_count': solved_crypto_count,
+            'crypto_per': crypto_per,
+
+            'forensics_count': forensics_count,
+            'solved_forensics_count': solved_forensics_count,
+            'forensics_per': forensics_per,
+
+            'reversing_count': reversing_count,
+            'solved_reversing_count': solved_reversing_count,
+            'reversing_per': reversing_per,
+
+            'pwnable_count': pwnable_count,
+            'solved_pwnable_count': solved_pwnable_count,
+            'pwnable_per': pwnable_per,
+
+            'web_count': web_count,
+            'solved_web_count': solved_web_count,
+            'web_per': web_per,
+
+            'network_count': network_count,
+            'solved_network_count': solved_network_count,
+            'network_per': network_per,
+
+            'misc_count': misc_count,
+            'solved_misc_count': solved_misc_count,
+            'misc_per': misc_per,
+
+            'level0_count': level0_count,
+            'solved_level0_count': solved_level0_count,
+            'level0_per': level0_per,
+
+            'level1_count': level1_count,
+            'solved_level1_count': solved_level1_count,
+            'level1_per': level1_per,
+
+            'level2_count': level2_count,
+            'solved_level2_count': solved_level2_count,
+            'level2_per': level2_per,
+
+            'level3_count': level3_count,
+            'solved_level3_count': solved_level3_count,
+            'level3_per': level3_per,
+
+            'level4_count': level4_count,
+            'solved_level4_count': solved_level4_count,
+            'level4_per': level4_per,
+
+            'level5_count': level5_count,
+            'solved_level5_count': solved_level5_count,
+            'level5_per': level5_per,
+        }
+
+        # ステータスぺージへ
+        return TemplateResponse(request, 'ctf/status.html', context)
+
+
+status = StatusView.as_view()
 
 
 class ProblemDetailView(LoginRequiredMixin, View):
@@ -214,7 +554,7 @@ class ProblemDetailView(LoginRequiredMixin, View):
                     userproblem.save()
 
                     # custom_userモデルのスコアを更新
-                    user = get_user_model().objects.get(id=self.request.user.id)
+                    user = User.objects.get(id=self.request.user.id)
                     user.score += problem.score
                     user.score_updated_at = datetime.datetime.now()
                     user.save()
@@ -222,13 +562,13 @@ class ProblemDetailView(LoginRequiredMixin, View):
                     # custom_userモデルのランキングを更新
                     update_custom_user = []
                     # 点数と点数更新日時でソートしてカラムを全て取り出して配列で回す
-                    id_list = get_user_model().objects.values_list('id', flat=True).order_by('-score',
-                                                                                             'score_updated_at')
+                    id_list = User.objects.values_list('id', flat=True).order_by('-score',
+                                                                                 'score_updated_at')
                     # rank = インデックス, user_id = アイテム
                     for rank, user_id in enumerate(id_list):
-                        custom_user = get_user_model()(id=user_id, ranking=rank + 1)
+                        custom_user = User(id=user_id, ranking=rank + 1)
                         update_custom_user.append(custom_user)
-                    get_user_model().objects.bulk_update(update_custom_user, fields=['ranking'])
+                    User.objects.bulk_update(update_custom_user, fields=['ranking'])
 
                 # ロギング
                 logger.info(

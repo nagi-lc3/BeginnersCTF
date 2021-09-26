@@ -1,14 +1,15 @@
-import re
-
 from django.core.mail import EmailMessage
 
 from .models import Problem, Inquiry
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UsernameField
+
+User = get_user_model()
 
 
 class ProblemDetailForm(forms.ModelForm):
+    """問題詳細フォーム"""
+
     class Meta:
         model = Problem
         fields = ('answer',)
@@ -26,6 +27,8 @@ class ProblemDetailForm(forms.ModelForm):
 
 
 class InquiryForm(forms.ModelForm):
+    """お問い合わせフォーム"""
+
     class Meta:
         model = Inquiry
         fields = ('name', 'email', 'subject', 'contents')
@@ -38,7 +41,7 @@ class InquiryForm(forms.ModelForm):
         self.fields['contents'].widget.attrs = {'placeholder': 'お問い合わせ内容を入力してください。',
                                                 'rows': 10}
         for field in self.fields.values():
-            field.widget.attrs['class'] = 'form-control mb-3'
+            field.widget.attrs['class'] = 'form-control'
 
     def send_email(self):
         name = self.cleaned_data['name']
@@ -56,14 +59,15 @@ class InquiryForm(forms.ModelForm):
         message.send()
 
 
-class UsernameChangeForm(forms.ModelForm):
+class MyPageForm(forms.ModelForm):
+    """マイページフォーム"""
+    username = forms.CharField(max_length=30, required=False, label='ユーザ名')
+
     class Meta:
-        model = get_user_model()
-        fields = ('username',)
-        field_classes = {'username': UsernameField}
+        model = User
+        fields = ('icon', 'username',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = "form-control"
-            field.widget.attrs['placeholder'] = "150 characters or fewer. Letters, digits and @/./+/-/_ only."

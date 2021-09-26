@@ -13,13 +13,7 @@
   <h3 class="font-weight-bold text-center white-text pb-2">確認メールを送信</h3>
   <hr class="w-header white my-4">
 
-  {% if messages %}
-  {% for message in messages %}
-  <div class="alert alert-{{ message.tags }}" role="alert">
-    <span>{{ message }}</span>
-  </div>
-  {% endfor %}
-  {% endif %}
+  {% bootstrap_messages %}
 
   <h3 class="text-center white-text pb-2">受信ボックスを確認してください。</h3>
 

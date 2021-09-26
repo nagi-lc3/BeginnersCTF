@@ -11,13 +11,7 @@
   <h3 class="font-weight-bold text-center white-text pb-2">問題詳細ページ</h3>
   <hr class="w-header white my-4">
 
-  {% if messages %}
-  {% for message in messages %}
-  <div class="alert alert-{{ message.tags }}" role="alert">
-    <span>{{ message }}</span>
-  </div>
-  {% endfor %}
-  {% endif %}
+  {% bootstrap_messages %}
 
   <div class="card p-5 bg-info">
     <h3>{{ problem.name }}</h3>

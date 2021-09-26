@@ -31,13 +31,13 @@ class Problem(models.Model):
         (5, 5),
     )
 
-    name = models.CharField(verbose_name='問題名', max_length=255)
+    name = models.CharField(verbose_name='問題名', max_length=50)
     file = models.FileField(verbose_name='問題ファイル', upload_to='problems/', null=True, blank=True)
     statement = models.TextField(verbose_name='問題文')
-    genre = models.CharField(verbose_name='問題ジャンル', choices=GENRE, max_length=255)
+    genre = models.CharField(verbose_name='問題ジャンル', choices=GENRE, max_length=50)
     level = models.IntegerField(verbose_name='問題難易度', choices=LEVEL)
     score = models.IntegerField(verbose_name='問題得点')
-    answer = models.CharField(verbose_name='問題解答', validators=[answer_regex], max_length=255)
+    answer = models.CharField(verbose_name='問題解答', validators=[answer_regex], max_length=50)
     created_at = models.DateTimeField(verbose_name='問題作成日時', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='問題更新日時', auto_now=True)
 
@@ -63,12 +63,6 @@ class UserProblem(models.Model):
     problem_correct_answer = models.BooleanField(verbose_name='問題正解', default=0)
     corrected_at = models.DateTimeField(verbose_name='問題正解日時', null=True, blank=True)
 
-    # class Meta:
-    #     constraints = [
-    #         # custom_userとproblemでユニーク制約
-    #         models.UniqueConstraint(fields=['custom_user', 'problem'], name='unique_stock')
-    #     ]
-
 
 class Information(models.Model):
     """お知らせモデル"""
@@ -77,7 +71,7 @@ class Information(models.Model):
         db_table = 'information'
         verbose_name = verbose_name_plural = 'お知らせ'
 
-    title = models.CharField(verbose_name='お知らせタイトル', max_length=255)
+    title = models.CharField(verbose_name='お知らせタイトル', max_length=50)
     contents = models.TextField(verbose_name='お知らせ内容')
     created_at = models.DateTimeField(verbose_name='お知らせ作成日時', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='お知らせ更新日時', auto_now=True)
@@ -93,9 +87,9 @@ class Inquiry(models.Model):
         db_table = 'inquiry'
         verbose_name = verbose_name_plural = 'お問い合わせ'
 
-    name = models.CharField(verbose_name='名前', max_length=100)
+    name = models.CharField(verbose_name='名前', max_length=50)
     email = models.EmailField(verbose_name='メールアドレス')
-    subject = models.CharField(verbose_name='お問い合わせ件名', max_length=100)
+    subject = models.CharField(verbose_name='お問い合わせ件名', max_length=50)
     contents = models.TextField(verbose_name='お問い合わせ内容')
     created_at = models.DateTimeField(verbose_name='お問い合わせ日時', auto_now_add=True)
 

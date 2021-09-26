@@ -5,11 +5,11 @@ import django_tables2
 from django.http import HttpResponseRedirect
 from django.template.response import TemplateResponse
 from django.urls import reverse_lazy, reverse
-from django.utils.html import format_html, escape
+from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django_tables2 import tables, RequestConfig
 
-from .forms import UsernameChangeForm, ProblemDetailForm, InquiryForm
+from .forms import ProblemDetailForm, InquiryForm, MyPageForm
 from .models import Information, Problem, UserProblem
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -22,6 +22,8 @@ logger = logging.getLogger(__name__)
 
 
 class IndexView(TemplateView):
+    """indexページ"""
+
     template_name = 'ctf/index.html'
 
 
@@ -29,6 +31,8 @@ index = IndexView.as_view()
 
 
 class InformationListView(ListView):
+    """お知らせページ"""
+
     model = Information
     template_name = 'ctf/information.html'
 
@@ -43,7 +47,9 @@ class ImageColumn(django_tables2.Column):
     """アイコンのフォーマット"""
 
     def render(self, value):
-        return mark_safe('<img src="/media/%s" height="25px" class="rounded-circle border me-1" />' % escape(value))
+        return mark_safe(
+            '<img src="/media/%s" class="rounded-circle border me-1" height="25" alt="" loading="lazy" />'
+            % escape(value))
 
 
 class RankingTable(tables.Table):
@@ -57,6 +63,7 @@ class RankingTable(tables.Table):
 
 
 class RankingView(LoginRequiredMixin, View):
+    """ランキングページ"""
 
     def get(self, request, *args, **kwargs):
         queryset = get_user_model().objects.order_by('ranking')
@@ -74,6 +81,8 @@ ranking = RankingView.as_view()
 
 
 class ProblemListView(LoginRequiredMixin, ListView):
+    """問題一覧ページ"""
+
     model = UserProblem
     template_name = 'ctf/problem_list.html'
 
@@ -86,6 +95,8 @@ problem_list = ProblemListView.as_view()
 
 
 class BoardView(LoginRequiredMixin, TemplateView):
+    """掲示板ページ"""
+
     template_name = 'ctf/board.html'
 
 
@@ -111,30 +122,55 @@ inquiry = InquiryView.as_view()
 
 
 class MyPageView(LoginRequiredMixin, View):
+    """マイページ"""
 
     def get(self, request, *args, **kwargs):
         queryset = get_user_model().objects.get(id=request.user.id)
         initial_data = {
-            'username': queryset.username
+            'icon': queryset.icon,
+            'username': queryset.username,
         }
         context = {}
-        form = UsernameChangeForm(initial=initial_data)
+        form = MyPageForm(initial=initial_data)
         context["form"] = form
         return render(request, 'ctf/my_page.html', context)
 
     def post(self, request, *args, **kwargs):
         context = {}
-        form = UsernameChangeForm(request.POST)
+        # instanceでログイン中のユーザ情報をformsに返す
+        form = MyPageForm(request.POST, request.FILES)
 
         if form.is_valid():
+            icon = form.cleaned_data["icon"]
             username = form.cleaned_data["username"]
-            user_obj = get_user_model().objects.get(username=request.user.username)
-            user_obj.username = username
-            user_obj.save()
-            messages.info(request, "ユーザー名を変更しました。")
+
+            # モデル変更
+            user = get_user_model().objects.get(username=request.user.username)
+            # ファイルを選択しない時はアイコンは変更しない
+            if icon != 'icon/default.jpg':
+                user.icon = icon
+            user.username = username
+            user.save()
+
+            # メッセージ
+            messages.info(request, "ユーザー情報を変更しました。")
 
             return redirect('ctf:my_page')
+
         else:
+            # バリデーションチェックに引っかかった場合はアイコンのみ更新するか判断
+            icon = form.cleaned_data["icon"]
+
+            # モデル変更
+            user = get_user_model().objects.get(username=request.user.username)
+            # ファイルを選択しない時はアイコンは変更しない
+            if icon != 'icon/default.jpg':
+                user.icon = icon
+            user.save()
+
+            # メッセージ
+            messages.info(request, "ユーザー情報を変更しました。")
+
             context["form"] = form
 
             return render(request, 'ctf/my_page.html', context)
@@ -144,6 +180,8 @@ my_page = MyPageView.as_view()
 
 
 class ProblemDetailView(LoginRequiredMixin, View):
+    """問題詳細ページ"""
+
     model = Problem
     template_name = 'ctf/problem_detail.html'
 

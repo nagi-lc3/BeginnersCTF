@@ -9,3 +9,4 @@ django-boost
 django-import-export
 django-tables2
 django-bootstrap-v5
+django-cleanup

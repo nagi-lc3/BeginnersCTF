@@ -161,19 +161,19 @@ class MyPageView(LoginRequiredMixin, View):
             # バリデーションチェックに引っかかった場合はアイコンのみ更新するか判断
             icon = form.cleaned_data["icon"]
 
-            # モデル変更
-            user = get_user_model().objects.get(username=request.user.username)
             # ファイルを選択しない時はアイコンは変更しない
             if icon != 'icon/default.jpg':
+                # モデル変更
+                user = get_user_model().objects.get(username=request.user.username)
                 user.icon = icon
-            user.save()
-
-            # メッセージ
-            messages.info(request, "ユーザー情報を変更しました。")
-
-            context["form"] = form
-
-            return render(request, 'ctf/my_page.html', context)
+                user.save()
+                
+                # メッセージ
+                messages.info(request, "ユーザー情報を変更しました。")
+                return redirect('ctf:my_page')
+            else:
+                context["form"] = form
+                return render(request, 'ctf/my_page.html', context)
 
 
 my_page = MyPageView.as_view()

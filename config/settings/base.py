@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'import_export',
     'django_tables2',
     'bootstrap5',
+    'django_cleanup',
 
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',

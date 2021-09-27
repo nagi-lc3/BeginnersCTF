@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load bootstrap5 %}
+{% load static %}
+
+{% block page_title %} BeginnersCTF | ログイン失敗{% endblock %}
+
+{% load i18n %}
+
+{% block content %}
+
+<div class="container my-5">
+  <!-- タイトル -->
+  <h6 class="font-weight-bold text-center grey-text text-uppercase small mb-4">login_failure</h6>
+  <h3 class="font-weight-bold text-center white-text pb-2">ログイン失敗</h3>
+  <hr class="w-header white my-4">
+
+  <div class="row d-flex align-items-center justify-content-center">
+    <div class="card">
+      <div class="card-body z-depth-2 px-4">
+
+        <h1 class="mb-5">ソーシャルネットワークログインに失敗しました</h1>
+
+        <p>ソーシャルネットワークアカウントにログインする際にエラーが発生しました。</p>
+        <p>以下のリンクでログアウトしてからもう一度お試しください。</p>
+        <a href="{% url 'account_logout' %}">ログアウト</a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

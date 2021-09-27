@@ -83,5 +83,6 @@ class AccountDeleteForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs = {'placeholder': 'メールアドレス', }
         for field in self.fields.values():
             field.widget.attrs['class'] = "form-control"

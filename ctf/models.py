@@ -57,8 +57,8 @@ class UserProblem(models.Model):
         unique_together = ['custom_user', 'problem']
 
     # リレーション
-    custom_user = models.ForeignKey(get_user_model(), verbose_name='ユーザ名', on_delete=models.PROTECT)
-    problem = models.ForeignKey(Problem, verbose_name='問題名', on_delete=models.PROTECT)
+    custom_user = models.ForeignKey(get_user_model(), verbose_name='ユーザ名', on_delete=models.CASCADE)
+    problem = models.ForeignKey(Problem, verbose_name='問題名', on_delete=models.CASCADE)
 
     problem_correct_answer = models.BooleanField(verbose_name='問題正解', default=0)
     corrected_at = models.DateTimeField(verbose_name='問題正解日時', null=True, blank=True)

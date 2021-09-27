@@ -15,7 +15,7 @@
 
   <div class="card p-5 bg-info">
     <h3>{{ problem.name }}</h3>
-    <p>{{ problem.statement|linebreaksbr }}</p>
+    <p>{{ problem.statement|safe }}</p>
     <p><a href="../../media/{{ problem.file }}" download>{{ problem.file|cut:"problems/"|default:'ファイルなし' }}</a>
     </p>
   </div>

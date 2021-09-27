@@ -9,12 +9,12 @@ from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django_tables2 import tables, RequestConfig
 
-from .forms import ProblemDetailForm, InquiryForm, MyPageForm
+from .forms import ProblemDetailForm, InquiryForm, MyPageForm, AccountDeleteForm
 from .models import Information, Problem, UserProblem
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView
+from django.views.generic import TemplateView, ListView, DetailView, FormView, UpdateView, DeleteView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 
@@ -519,6 +519,49 @@ class StatusView(LoginRequiredMixin, View):
 status = StatusView.as_view()
 
 
+class AccountDeleteView(LoginRequiredMixin, View):
+    """アカウント削除ページ"""
+
+    model = User
+    template_name = 'ctf/account_delete.html'
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            'form': AccountDeleteForm(),
+        }
+        return TemplateResponse(request, 'ctf/account_delete.html', context)
+
+    def post(self, request, *args, **kwargs):
+        form = AccountDeleteForm(request.POST)
+        email = request.POST.get('email')
+
+        if form.is_valid():
+            user = User.objects.get(id=self.request.user.id)
+
+            if email == user.email:
+                user.delete()
+
+                # ロギング
+                logger.info("User(id={}) has deleted the account.".format(self.request.user.id))
+
+                # フラッシュメッセージを画面に表示
+                messages.success(request, "アカウント（{}）を削除しました。ご利用ありがとうございました。".format(self.request.user.email))
+
+                return HttpResponseRedirect(reverse('account_login'))
+            else:
+                # フラッシュメッセージを画面に表示
+                messages.error(request, "メールアドレスが一致しません。")
+
+                # 問題詳細画面を再表示
+                return TemplateResponse(request, 'ctf/account_delete.html', {'form': form})
+
+        if not form.is_valid():
+            return TemplateResponse(request, 'ctf/account_delete.html', {'form': form})
+
+
+account_delete = AccountDeleteView.as_view()
+
+
 class ProblemDetailView(LoginRequiredMixin, View):
     """問題詳細ページ"""
 
@@ -582,7 +625,7 @@ class ProblemDetailView(LoginRequiredMixin, View):
 
             else:
                 # フラッシュメッセージを画面に表示
-                messages.error(request, "解答が違います。".format(problem.name))
+                messages.error(request, "解答が違います。")
                 # 問題詳細画面を再表示
                 return TemplateResponse(request, 'ctf/problem_detail.html', {'form': form, 'problem': problem_pk})
 

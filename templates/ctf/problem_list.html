@@ -30,7 +30,7 @@
       <div class="col-6 col-md-4 list_item" data-group="{{ userproblem.problem.genre }}">
         <a class="btn card my-3 p-3 bg-info" href="{% url 'ctf:problem_detail' userproblem.problem.pk %}">
           <div class="card-body">
-            <h4 class="card-title m-0">{{ userproblem.problem.name }}</h4>
+            <h4 class="card-title m-0 btn-text-size">{{ userproblem.problem.name }}</h4>
             <hr class="card-text">
             <p class="card-text btn-text-size">ジャンル：{{ userproblem.problem.genre }}</p>
             <p class="card-text">レベル：{{ userproblem.problem.level }}</p>
